@@ -8,7 +8,7 @@
 #include "geometry_msgs/PoseArray.h"
 
 #include <sound_play/sound_play.h>
-//#include <sound_play/SoundRequest.h>
+#include <sound_play/SoundRequest.h>
 
 #include <vector>
 #include <iostream>
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     //publisher for sound
-    //ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound", 1);
+    ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound", 1);
        
     //sleep for a bit to make sure the pub will work
     sleepok(2,n);
