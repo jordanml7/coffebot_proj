@@ -37,32 +37,28 @@ int main(int argc, char **argv)
 	sleepok(2,n);
         string name;
         getline(cin,name);
-        sleep(1);
         
         sayPhrase(sound_pub,1,name,"");
         sleepok(2,n);
         string coffee;
         getline(cin,coffee);
-        sleep(1);
         
         sayPhrase(sound_pub,2,name,coffee);
         sleepok(2,n);
-        sleep(1);
+        cin.get();
 
         sayPhrase(sound_pub,3,name,coffee);
         sleepok(2,n);
         cin.get();
         // SWITCH TO WHEN SENSOR ACTIVATED
-        sleep(1);
         
         sayPhrase(sound_pub,4,name,coffee);
         sleepok(2,n);
-        sleep(1);
+        cin.get();
         
         sayPhrase(sound_pub,5,name,coffee);
         sleepok(2,n);
-        
-        break;
+        cin.get();
     }
     
     return 0;
