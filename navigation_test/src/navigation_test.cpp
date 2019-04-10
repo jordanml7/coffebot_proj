@@ -46,21 +46,17 @@ int main(int argc, char **argv)
                 
         cout << "Ask for name & order (press Enter)" << endl;
         cin.get();
-        sleep(1);
         
         cout << "To the coffeeshop" << endl;        
-        move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
+        //move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
-        sleep(1);
         
         cout << "Place order (press Enter)" << endl;
         cin.get();
-        sleep(1);
                 
         cout << "Deliver order" << endl;        
-        move_turtle_bot(home_location[0],home_location[1],home_location[2]);
+        //move_turtle_bot(home_location[0],home_location[1],home_location[2]);
         sleepok(2,n);
-        sleep(1);
         
         cout << "Done." << endl;
         break;
