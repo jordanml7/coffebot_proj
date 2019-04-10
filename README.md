@@ -49,21 +49,17 @@ Must have tufts_service_robots repo installed in same workspace.
 In the first terminal, do:
 
 ```
-$ roslaunch tbot2_launch tbot2_lidar.launch OR tbot2.launch
-```
-
-In a second terminal, do:
-
-```
-$ roslaunch tbot2_launch amcl_navigation.launch
+$ roslaunch coffeebot_launch coffeebot_launch
 ```
 
 After rviz shows up, provide the robot's initial location. Now you can launch any app or node you wrote which moves the robot around.
 
-In a third terminal, do:
+In a second terminal, do:
 ```
 $ rosrun [folder containing node] [node name], like...
 $ rosrun navigation_test navigation_test
 ```
+
+Modify the above launch file with any additional nodes
 
 
