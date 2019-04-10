@@ -25,15 +25,20 @@ $ source devel/setup.bash
 ```
 
 
-## Upload changes
+## Upload & Download changes
 
-Navigate to workspace and into coffeebot_proj folder
+To upload changes, navigate to workspace and into coffeebot_proj folder
 ```
 $ git init
 $ git add .
 $ git commit -m "comments describing this commit"
 $ git remote add origin https://github.com/jordanml7/coffebot_proj.git
 $ git push origin master
+```
+
+To download latest version
+```
+$ git pull
 ```
 
 
