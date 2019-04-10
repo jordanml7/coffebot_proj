@@ -38,6 +38,7 @@ int main(int argc, char **argv)
     while (ros::ok()) {
         
         // RECORD STARTING LOCATION INTO HOME_LOCATION
+        ros::spinOnce();
         home_location[0] = curr_loc[0];
         home_location[1] = curr_loc[1];
         home_location[2] = curr_loc[2];
