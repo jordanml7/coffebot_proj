@@ -17,7 +17,7 @@
 	<!-- <include file="$(find tbot2_filters)/launch/tbot2_filters.launch"/> -->
 	
 	<!-- launch amcl navigation -->
-	<!-- <include file="$(find tbot2_amcl_navigation)/launch/amcl_navigation.launch"/> -->
+	<!-- <include file="$(find tbot2_launch)/launch/amcl_navigation.launch"/> -->
 
 	<!-- launch logging -->
 	<include file="$(find tbot2_launch)/launch/logging.launch">
