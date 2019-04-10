@@ -8,7 +8,7 @@
 #include "geometry_msgs/PoseArray.h"
 
 #include <sound_play/sound_play.h>
-#include <sound_play/SoundRequest.h>
+//#include <sound_play/SoundRequest.h>
 
 #include <vector>
 #include <iostream>
@@ -18,7 +18,7 @@
 using namespace std;
 
 void sleepok(int, ros::NodeHandle &);
-void sayPhrase(ros::Publisher, int, char [], char []);
+void sayPhrase(int, char [], char []);
 
 int main(int argc, char **argv)
 {
@@ -26,36 +26,36 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     //publisher for sound
-    ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound", 1);
+    //ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound", 1);
        
     //sleep for a bit to make sure the pub will work
     sleepok(2,n);
   
     while (ros::ok()) {
         
-        sayPhrase(sound_pub,0,NULL,NULL);
+        sayPhrase(0,NULL,NULL);
 	sleepok(2,n);
         char name[100];
         cin.getline(name,100);
         
-        sayPhrase(sound_pub,1,name,NULL);
+        sayPhrase(1,name,NULL);
         sleepok(2,n);
         char coffee[100];
         cin.getline(coffee,100);
         
-        sayPhrase(sound_pub,2,name,coffee);
+        sayPhrase(2,name,coffee);
         sleepok(2,n);
         cin.get();
 
-        sayPhrase(sound_pub,3,name,coffee);
+        sayPhrase(3,name,coffee);
         sleepok(2,n);
         cin.get();
         
-        sayPhrase(sound_pub,4,name,coffee);
+        sayPhrase(4,name,coffee);
         sleepok(2,n);
         cin.get();
         
-        sayPhrase(sound_pub,5,name,coffee);
+        sayPhrase(5,name,coffee);
         sleepok(2,n);
         cin.get();
     }
@@ -70,7 +70,7 @@ void sleepok(int t, ros::NodeHandle &nh)
         sleep(t);
 }
 
-void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
+void sayPhrase(int m, char name[], char coffee[])
 {
     //sound_play::SoundRequest S;
     sound_play::SoundClient S;
