@@ -1,7 +1,3 @@
-Create centralized launch file??
-
-Test navigation & location storage (for returning)
-
 Add human detection node for avoiding obstacles
 
 Add sensor & arduino for sensing coffee delivery

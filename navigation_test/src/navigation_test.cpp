@@ -44,21 +44,21 @@ int main(int argc, char **argv)
         cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
         // Maybe detect a person in a room and approach them, then record this location?
                 
-        cout << "Ask for name & order (press Enter)" << endl;
+        cout << endl << "Ask for name & order (press Enter)" << endl;
         cin.get();
         
         cout << "To the coffeeshop at : " << coffee_shop[0] << ", " << coffee_shop[1] << endl;        
         move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
         
-        cout << "Place order (press Enter)" << endl;
+        cout << endl << "Place order (press Enter)" << endl;
         cin.get();
                 
         cout << "Deliver order to: " << home_location[0] << ", " << home_location[1] << endl;        
         move_turtle_bot(home_location[0],home_location[1],home_location[2]);
         sleepok(2,n);
         
-        cout << "Done." << endl;
+        cout << endl << "Done." << endl;
         break;
         // Update home_location to next person detected?
     }
@@ -87,8 +87,6 @@ int move_turtle_bot (double x, double y, double yaw)
     ac.waitForServer();
     move_base_msgs::MoveBaseGoal goal;
     
-    cout << "Going to :" << x << ", " << y;
-
     goal.target_pose.header.stamp = ros::Time::now();
     goal.target_pose.header.frame_id = "/map";
     
