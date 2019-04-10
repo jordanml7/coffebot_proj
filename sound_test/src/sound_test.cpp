@@ -75,7 +75,6 @@ void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
     sound_play::SoundRequest S;
     S.sound = -3;
     S.command = 1;
-    S.volume = 1;
 
     string startMsg = "Hello, what's your name?";
     char coffeeRqst[100];
@@ -90,7 +89,7 @@ void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
 
     string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
     
-    S.arg = "Hello";
+    S.arg = messages[m];
     cout << messages[m] << endl;
 
     sound_pub.publish(S);
