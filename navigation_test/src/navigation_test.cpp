@@ -37,7 +37,6 @@ int main(int argc, char **argv)
   
     while (ros::ok()) {
         
-        // RECORD STARTING LOCATION INTO HOME_LOCATION
         ros::spinOnce();
         home_location[0] = curr_loc[0];
         home_location[1] = curr_loc[1];
@@ -48,15 +47,15 @@ int main(int argc, char **argv)
         cout << "Ask for name & order (press Enter)" << endl;
         cin.get();
         
-        cout << "To the coffeeshop" << endl;        
-        //move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
+        cout << "To the coffeeshop at : " << coffee_shop[0] << ", " << coffee_shop[1] << endl;        
+        move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
         
         cout << "Place order (press Enter)" << endl;
         cin.get();
                 
-        cout << "Deliver order" << endl;        
-        //move_turtle_bot(home_location[0],home_location[1],home_location[2]);
+        cout << "Deliver order to: " << home_location[0] << ", " << home_location[1] << endl;        
+        move_turtle_bot(home_location[0],home_location[1],home_location[2]);
         sleepok(2,n);
         
         cout << "Done." << endl;
@@ -77,10 +76,8 @@ void sleepok(int t, ros::NodeHandle &nh)
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl)
 {
     curr_loc[0] = sub_amcl->pose.pose.position.x;
-    curr_loc[1] = sub_amcl->pose.pose.position.x;
+    curr_loc[1] = sub_amcl->pose.pose.position.y;
     curr_loc[2] = tf::getYaw(sub_amcl->pose.pose.orientation);
-    cout << curr_loc[0];
-    cout << curr_loc[1];
 }
 
 int move_turtle_bot (double x, double y, double yaw)
