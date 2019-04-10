@@ -9,6 +9,7 @@
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
 #include <sound_play/sound_play.h>
+#include <sound_play/SoundRequest.h>
 
 #include <vector>
 #include <iostream>
@@ -28,9 +29,15 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "move_base_client");
     ros::NodeHandle n;
-       
+    
+    // subscriber for position
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",100,get_turtle_bot_loc);
-    // sleep to give subscriber time to open
+    //sleep for a bit to make sure the sub will work
+    sleepok(2,n);
+    
+    // publisher for sound
+    ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound", 1);
+    //sleep for a bit to make sure the pub will work
     sleepok(2,n);
     
     // this will be reset based on starting location
