@@ -18,7 +18,7 @@
 using namespace std;
 
 void sleepok(int, ros::NodeHandle &);
-void sayPhrase(ros::Publisher, int, string, string);
+void sayPhrase(ros::Publisher, int, char [], char []);
 
 int main(int argc, char **argv)
 {
@@ -33,15 +33,15 @@ int main(int argc, char **argv)
   
     while (ros::ok()) {
         
-        sayPhrase(sound_pub,0,"","");
+        sayPhrase(sound_pub,0,NULL,NULL);
 	sleepok(2,n);
-        string name;
-        getline(cin,name);
+        char name[100];
+        cin.getline(name,100);
         
-        sayPhrase(sound_pub,1,name,"");
+        sayPhrase(sound_pub,1,name,NULL);
         sleepok(2,n);
-        string coffee;
-        getline(cin,coffee);
+        char coffee[100];
+        cin.getline(coffee,100);
         
         sayPhrase(sound_pub,2,name,coffee);
         sleepok(2,n);
@@ -50,7 +50,6 @@ int main(int argc, char **argv)
         sayPhrase(sound_pub,3,name,coffee);
         sleepok(2,n);
         cin.get();
-        // SWITCH TO WHEN SENSOR ACTIVATED
         
         sayPhrase(sound_pub,4,name,coffee);
         sleepok(2,n);
@@ -71,12 +70,12 @@ void sleepok(int t, ros::NodeHandle &nh)
         sleep(t);
 }
 
-void sayPhrase(ros::Publisher sound_pub, int m, string name, string coffee)
+void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
 {
     sound_play::SoundRequest S;
     S.sound = -3;
     S.command = 1;
-        
+
     string startMsg = "Hello, what's your name?";
     char coffeeRqst[100];
     sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
@@ -88,7 +87,7 @@ void sayPhrase(ros::Publisher sound_pub, int m, string name, string coffee)
     char coffeeRtrn[100];
     sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
 
-    string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,CoffeeOrdr,thankYou,coffeeRtrn}
+    string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
     
     S.arg = messages[m];
     cout << messages[m] << endl;

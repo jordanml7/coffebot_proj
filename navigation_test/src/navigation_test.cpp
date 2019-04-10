@@ -18,9 +18,9 @@
 using namespace std;
 
 void sleepok(int, ros::NodeHandle &);
-void get_turtle_bot_loc(double home_location[3]);
+void get_turtle_bot_loc(double home_location[]);
 int move_turtle_bot (double, double, double);
-void sayPhrase(ros::Publisher, int, string, string);
+void sayPhrase(ros::Publisher, int, char [], char []);
 
 int main(int argc, char **argv)
 {
@@ -46,16 +46,16 @@ int main(int argc, char **argv)
         cout << "Starting at: " << home_location[0] << ", " << home_location[1];
         // Maybe detect a person in a room and approach them, then record this location?
         
-        sayPhrase(sound_pub,0,"","");
+        sayPhrase(sound_pub,0,NULL,NULL);
 	sleepok(2,n);
-        string name;
-        getline(cin,name);
+        char name[100];
+        cin.getline(name,100);
         sleep(1);
         
-        sayPhrase(sound_pub,1,name,"");
+        sayPhrase(sound_pub,1,name,NULL);
         sleepok(2,n);
-        string coffee;
-        getline(cin,coffee);
+        char coffee[100];
+        cin.getline(coffee,100);
         sleep(1);
         
         sayPhrase(sound_pub,2,name,coffee);
@@ -95,7 +95,7 @@ void sleepok(int t, ros::NodeHandle &nh)
         sleep(t);
 }
 
-void get_turtle_bot_loc(double home_location[3])
+void get_turtle_bot_loc(double home_location[])
 {
     tf::TransformListener listener;
     
@@ -112,9 +112,9 @@ void get_turtle_bot_loc(double home_location[3])
     pBase.header.stamp = current_transform;
     listener.transformPose("map", pBase, pMap);
     
-    home_location[0] = pMap[0];
-    home_location[1] = pMap[1];
-    home_location[2] = pMap[2];
+    home_location[0] = pMap.pose.position.x;
+    home_location[1] = pMap.pose.position.y;
+    home_location[2] = tf::getYaw(pMap.pose.orientation);
 }
 
 int move_turtle_bot (double x, double y, double yaw)
@@ -147,12 +147,12 @@ int move_turtle_bot (double x, double y, double yaw)
     return 0;
 }
 
-void sayPhrase(ros::Publisher sound_pub, int m, string name, string coffee)
+void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
 {
     sound_play::SoundRequest S;
     S.sound = -3;
     S.command = 1;
-        
+
     string startMsg = "Hello, what's your name?";
     char coffeeRqst[100];
     sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
@@ -164,7 +164,7 @@ void sayPhrase(ros::Publisher sound_pub, int m, string name, string coffee)
     char coffeeRtrn[100];
     sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
 
-    string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,CoffeeOrdr,thankYou,coffeeRtrn}
+    string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
     
     S.arg = messages[m];
     cout << messages[m] << endl;
