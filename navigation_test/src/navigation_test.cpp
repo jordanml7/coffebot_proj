@@ -41,41 +41,28 @@ int main(int argc, char **argv)
         home_location[0] = curr_loc[0];
         home_location[1] = curr_loc[1];
         home_location[2] = curr_loc[2];
-        cout << "Starting at: " << home_location[0] << ", " << home_location[1];
+        cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
         // Maybe detect a person in a room and approach them, then record this location?
-        
-        cout << "Ask name" << endl;
+                
+        cout << "Ask for name & order (press Enter)" << endl;
         cin.get();
         sleep(1);
         
-        cout << "Ask for order" << endl;
-        cin.get();
-        sleep(1);
-        
-        cout << "To the coffeeshop" << endl;
-        cin.get();
-        sleep(1);
-        
+        cout << "To the coffeeshop" << endl;        
         move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
         sleep(1);
         
-        cout << "Place order" << endl;
+        cout << "Place order (press Enter)" << endl;
         cin.get();
         sleep(1);
                 
-        cout << "Thank you" << endl;
-        cin.get();
-        sleep(1);
-        
+        cout << "Deliver order" << endl;        
         move_turtle_bot(home_location[0],home_location[1],home_location[2]);
         sleepok(2,n);
         sleep(1);
         
-        cout << "Deliver order" << endl;
-        cin.get();
-        sleep(1);
-        
+        cout << "Done." << endl;
         break;
         // Update home_location to next person detected?
     }
@@ -95,6 +82,8 @@ void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr
     curr_loc[0] = sub_amcl->pose.pose.position.x;
     curr_loc[1] = sub_amcl->pose.pose.position.x;
     curr_loc[2] = tf::getYaw(sub_amcl->pose.pose.orientation);
+    cout << curr_loc[0];
+    cout << curr_loc[1];
 }
 
 int move_turtle_bot (double x, double y, double yaw)
