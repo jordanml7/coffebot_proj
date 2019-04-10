@@ -9,5 +9,6 @@
 5. Add sensor & arduino for sensing coffee delivery
 
 6. Add speech-to-text capabilities for placing orders
+(http://edu.gaitech.hk/turtlebot/speech-doc.html)
 
 7. Add line detection capabilities??

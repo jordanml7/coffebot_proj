@@ -22,7 +22,7 @@ void sayPhrase(ros::Publisher, int, char [], char []);
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "move_base_client");
+    ros::init(argc, argv, "sound_test_test");
     ros::NodeHandle n;
 
     //publisher for sound
@@ -72,9 +72,10 @@ void sleepok(int t, ros::NodeHandle &nh)
 
 void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
 {
-    sound_play::SoundRequest S;
-    S.sound = -3;
-    S.command = 1;
+    //sound_play::SoundRequest S;
+    sound_play::SoundClient S;
+    //S.sound = -3;
+    //S.command = 1;
 
     string startMsg = "Hello, what's your name?";
     char coffeeRqst[100];
@@ -89,8 +90,9 @@ void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
 
     string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
     
-    S.arg = messages[m];
+    //S.arg = messages[m];
+    S.say(messages[m]);
     cout << messages[m] << endl;
 
-    sound_pub.publish(S);
+    //sound_pub.publish(S);
 }
