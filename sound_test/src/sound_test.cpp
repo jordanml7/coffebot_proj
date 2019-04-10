@@ -90,7 +90,7 @@ void sayPhrase(ros::Publisher sound_pub, int m, char name[], char coffee[])
 
     string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
     
-    S.arg = messages[m];
+    S.arg = "Hello";
     cout << messages[m] << endl;
 
     sound_pub.publish(S);

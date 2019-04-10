@@ -1,0 +1,13 @@
+1. Figure out output sound
+
+2. Create centralized launch file??
+
+3. Test navigation & location storage (for returning)
+
+4. Add human detection node for avoiding obstacles
+
+5. Add sensor & arduino for sensing coffee delivery
+
+6. Add speech-to-text capabilities for placing orders
+
+7. Add line detection capabilities??
