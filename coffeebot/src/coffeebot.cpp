@@ -7,8 +7,11 @@
 #include "geometry_msgs/Pose.h"
 #include "geometry_msgs/PoseArray.h"
 
+#include <sound_play/sound_play.h>
+
 #include <vector>
 #include <iostream>
+#include <string>
 #include <stdio.h>
 
 using namespace std;
@@ -16,6 +19,7 @@ using namespace std;
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(double home_location[]);
 int move_turtle_bot (double, double, double);
+void sayPhrase(int, char [], char []);
 
 int main(int argc, char **argv)
 {
@@ -38,37 +42,40 @@ int main(int argc, char **argv)
         cout << "Starting at: " << home_location[0] << ", " << home_location[1];
         // Maybe detect a person in a room and approach them, then record this location?
         
-        cout << "Ask name" << endl;
-        cin.get();
+        sayPhrase(0,NULL,NULL);
+	sleepok(2,n);
+        char name[100];
+        cin.getline(name,100);
         sleep(1);
         
-        cout << "Ask for order" << endl;
-        cin.get();
+        sayPhrase(1,name,NULL);
+        sleepok(2,n);
+        char coffee[100];
+        cin.getline(coffee,100);
         sleep(1);
         
-        cout << "To the coffeeshop" << endl;
-        cin.get();
+        sayPhrase(2,name,coffee);
+        sleepok(2,n);
         sleep(1);
-        
         move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
         sleep(1);
-        
-        cout << "Place order" << endl;
+
+        sayPhrase(3,name,coffee);
+        sleepok(2,n);
         cin.get();
-        sleep(1);
-                
-        cout << "Thank you" << endl;
-        cin.get();
+        // SWITCH TO WHEN SENSOR ACTIVATED
         sleep(1);
         
+        sayPhrase(4,name,coffee);
+        sleepok(2,n);
+        sleep(1);
         move_turtle_bot(home_location[0],home_location[1],home_location[2]);
         sleepok(2,n);
         sleep(1);
         
-        cout << "Deliver order" << endl;
-        cin.get();
-        sleep(1);
+        sayPhrase(5,name,coffee);
+        sleepok(2,n);
         
         break;
         // Update home_location to next person detected?
@@ -134,4 +141,25 @@ int move_turtle_bot (double x, double y, double yaw)
     //sleep(sleep_time);
   
     return 0;
+}
+
+void sayPhrase(int m, char name[], char coffee[])
+{
+    sound_play::SoundClient S;
+
+    string startMsg = "Hello, what's your name?";
+    char coffeeRqst[100];
+    sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
+    char coffeeCnfm[100];
+    sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.",coffee);
+    char coffeeOrdr[100];
+    sprintf(coffeeOrdr,"Hi! Could I please get a %s? Please press enter to tell me it's done.",coffee);
+    string thankYou = "Thank You!";
+    char coffeeRtrn[100];
+    sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
+
+    string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
+    
+    S.say(messages[m]);
+    cout << messages[m] << endl;
 }

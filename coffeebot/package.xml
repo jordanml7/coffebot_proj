@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>navigation_test</name>
+  <name>coffeebot</name>
   <version>0.0.0</version>
-  <description>The navigation_test package</description>
+  <description>The coffeebot package</description>
   <maintainer email="jlueck01@tufts.cs.edu">jlueck01</maintainer>
   <license>BSD</license>
   
@@ -13,18 +13,21 @@
   <build_depend>move_base_msgs</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
+  <build_depend>sound_play</build_depend>
   <build_depend>tf</build_depend>
   <build_export_depend>actionlib</build_export_depend>
   <build_export_depend>actionlib_msgs</build_export_depend>
   <build_export_depend>move_base_msgs</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>sound_play</build_export_depend>
   <build_export_depend>tf</build_export_depend>
   <exec_depend>actionlib</exec_depend>
   <exec_depend>actionlib_msgs</exec_depend>
   <exec_depend>move_base_msgs</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
+  <exec_depend>sound_play</exec_depend>
   <exec_depend>tf</exec_depend>
 
   <export>

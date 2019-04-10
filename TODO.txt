@@ -1,14 +1,12 @@
-1. Figure out output sound
+Create centralized launch file??
 
-2. Create centralized launch file??
+Test navigation & location storage (for returning)
 
-3. Test navigation & location storage (for returning)
+Add human detection node for avoiding obstacles
 
-4. Add human detection node for avoiding obstacles
+Add sensor & arduino for sensing coffee delivery
 
-5. Add sensor & arduino for sensing coffee delivery
-
-6. Add speech-to-text capabilities for placing orders
+Add speech-to-text capabilities for placing orders
 (http://edu.gaitech.hk/turtlebot/speech-doc.html)
 
-7. Add line detection capabilities??
+Add line detection capabilities??
