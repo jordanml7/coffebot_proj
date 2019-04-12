@@ -7,7 +7,12 @@
 
 	<!-- launch 3D sensor -->
 	<include file="$(find tbot2_launch)/launch/3dsensor.launch">
-		<arg name="scan_topic" default="scan"/>
+		<arg name="scan_topic" default="scan_ppl"/>
+	</include>
+	
+	<!-- launch lidar sensor and tf-->
+	<node name="lidar_tf_broadcaster" pkg="tbot2_sensors" type="rplidar_frame_broadcaster"/>
+	<include file="$(find tbot2_sensors)/launch/rplidar.launch">
 	</include>
 	
 	<!-- launch sound_play so the robot can speak -->
@@ -19,6 +24,10 @@
 	
 	<!-- launch amcl navigation -->
 	<include file="$(find tbot2_launch)/launch/amcl_navigation.launch">
+	</include>
+	
+        <!-- launch leg detection -->
+	<include file="$(find leg_detector)/launch/leg_detector.launch">
 	</include>
 	
 	<!-- launch logging -->
