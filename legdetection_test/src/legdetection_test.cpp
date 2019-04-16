@@ -17,12 +17,18 @@
 using namespace std;
 
 void sleepok(int, ros::NodeHandle &);
+void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_locs);
 int move_turtle_bot (double, double, double);
 
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "move_base_client");
     ros::NodeHandle n;
+    
+    // subscriber for position
+    ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",100,get_person_locs);
+    //sleep for a bit to make sure the sub will work
+    sleepok(2,n);
     
     // this will be reset based on starting location
     double home_location[3] = {21.8,13.9,0.0};
@@ -31,7 +37,8 @@ int main(int argc, char **argv)
     double coffee_shop[3] = {5.8,13.9,0.0};
   
     while (ros::ok()) {
-                
+        ros::spin();
+        
         cout << "Traveling to: " << coffee_shop[0] << ", " << coffee_shop[1] << endl;   
         move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
@@ -47,6 +54,11 @@ void sleepok(int t, ros::NodeHandle &nh)
 {
     if (nh.ok())
         sleep(t);
+}
+
+void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_locs)
+{
+    cout << "Counted " << (ppl_locs->people).size() << " people" << endl;
 }
 
 int move_turtle_bot (double x, double y, double yaw)
