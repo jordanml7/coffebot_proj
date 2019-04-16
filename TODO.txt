@@ -1,8 +1,14 @@
 Add human detection node for avoiding obstacles
+    Fix lidar issue (were all the correct packages installed?)
+    leg_detection still not working
+    Which topics am I subscribing to?
 
 Add sensor & arduino for sensing coffee delivery
+    How to get arduino readings into the ROS code - ask Jivko!
 
 Add speech-to-text capabilities for placing orders
-(http://edu.gaitech.hk/turtlebot/speech-doc.html)
+(http://edu.gaitech.hk/turtlebot/speech-doc.html OR google speech API)
 
-Add line detection capabilities??
+Add line detection capabilities?? Unlikely
+
+Combine with Marlow's elevator functionality!!
