@@ -16,7 +16,10 @@
 
 using namespace std;
 
+double curr_loc[3];
+
 void sleepok(int, ros::NodeHandle &);
+void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_locs);
 int move_turtle_bot (double, double, double);
 
@@ -26,26 +29,19 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
     
     // subscriber for position
-    ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",3,get_person_locs);
+    ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",1,get_person_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
-    double reliability = 0.95;
-    n.setParam("leg_reliability_limit",reliability);
     
-    // this will be reset based on starting location
-    double home_location[3] = {21.8,13.9,0.0};
-    
-    // coffee shop is currently right outside kitchenette
-    double coffee_shop[3] = {5.8,13.9,0.0};
-  
+    ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
+    sleepok(2,n);
+      
     while (ros::ok()) {
         ros::spinOnce();
     
-        n.getParam("leg_reliability_limit",reliability);
-        cout << "Reliability threshold set at " << reliability << endl;
-        cin.get();
+        cout << "Currently at x: " << curr_loc[0] << ", y: " << curr_loc[1] << endl;
         
-        cout << endl;
+        cin.get();
     }
     
     return 0;
@@ -67,6 +63,13 @@ void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_
             << ppl_locs->people[i].pos.x << ", y: " << ppl_locs->people[i].pos.y 
             << " with reliability: " << ppl_locs->people[i].reliability << endl;
     }
+}
+
+void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl)
+{
+    curr_loc[0] = sub_amcl->pose.pose.position.x;
+    curr_loc[1] = sub_amcl->pose.pose.position.y;
+    curr_loc[2] = tf::getYaw(sub_amcl->pose.pose.orientation);
 }
 
 int move_turtle_bot (double x, double y, double yaw)
