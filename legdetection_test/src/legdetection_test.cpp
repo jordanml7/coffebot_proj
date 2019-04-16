@@ -26,10 +26,10 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
     
     // subscriber for position
-    ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",100,get_person_locs);
+    ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",3,get_person_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
-    double reliability = 0.9;
+    double reliability = 0.95;
     n.setParam("leg_reliability_limit",reliability);
     
     // this will be reset based on starting location

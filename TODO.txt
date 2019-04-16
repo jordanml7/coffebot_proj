@@ -9,6 +9,8 @@ Add sensor & arduino for sensing coffee delivery
 Add speech-to-text capabilities for placing orders
 (http://edu.gaitech.hk/turtlebot/speech-doc.html OR google speech API)
 
+Attach bluetooth speaker!!
+
 Add line detection capabilities?? Unlikely
 
 Combine with Marlow's elevator functionality!!
