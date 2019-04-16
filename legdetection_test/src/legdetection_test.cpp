@@ -29,6 +29,7 @@ int main(int argc, char **argv)
     ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",100,get_person_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
+    n.setParam("leg_reliability_limit",0.9);
     
     // this will be reset based on starting location
     double home_location[3] = {21.8,13.9,0.0};
@@ -37,13 +38,11 @@ int main(int argc, char **argv)
     double coffee_shop[3] = {5.8,13.9,0.0};
   
     while (ros::ok()) {
-        ros::spin();
+        ros::spinOnce();
         
-        cout << "Traveling to: " << coffee_shop[0] << ", " << coffee_shop[1] << endl;   
-        move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
+        
         sleepok(2,n);
         
-        break;
     }
     
     return 0;
@@ -58,7 +57,14 @@ void sleepok(int t, ros::NodeHandle &nh)
 
 void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_locs)
 {
-    cout << "Counted " << (ppl_locs->people).size() << " people" << endl;
+    int ppl_meas = ppl_locs->people.size();
+    cout << "Counted " << ppl_meas << " people" << endl;
+    for(int i = 0; i < ppl_meas; i++) {
+        cout << "Person " << i << " recorded at x: " 
+            << ppl_locs->people[i].pos.x << ", y: " << ppl_locs->people[i].pos.y << endl;
+    }
+    
+    cout << endl;
 }
 
 int move_turtle_bot (double x, double y, double yaw)
