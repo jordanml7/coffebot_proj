@@ -29,7 +29,8 @@ int main(int argc, char **argv)
     ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",100,get_person_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
-    n.setParam("leg_reliability_limit",0.9);
+    double reliability = 0.9;
+    n.setParam("leg_reliability_limit",reliability);
     
     // this will be reset based on starting location
     double home_location[3] = {21.8,13.9,0.0};
@@ -39,10 +40,12 @@ int main(int argc, char **argv)
   
     while (ros::ok()) {
         ros::spinOnce();
+    
+        n.getParam("leg_reliability_limit",reliability);
+        cout << "Reliability set at " << reliability << endl;
+        cin.get();
         
-        
-        sleepok(2,n);
-        
+        cout << endl;
     }
     
     return 0;
@@ -63,8 +66,6 @@ void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_
         cout << "Person " << i << " recorded at x: " 
             << ppl_locs->people[i].pos.x << ", y: " << ppl_locs->people[i].pos.y << endl;
     }
-    
-    cout << endl;
 }
 
 int move_turtle_bot (double x, double y, double yaw)
