@@ -42,7 +42,7 @@ int main(int argc, char **argv)
         ros::spinOnce();
     
         n.getParam("leg_reliability_limit",reliability);
-        cout << "Reliability set at " << reliability << endl;
+        cout << "Reliability threshold set at " << reliability << endl;
         cin.get();
         
         cout << endl;
@@ -64,7 +64,8 @@ void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_
     cout << "Counted " << ppl_meas << " people" << endl;
     for(int i = 0; i < ppl_meas; i++) {
         cout << "Person " << i << " recorded at x: " 
-            << ppl_locs->people[i].pos.x << ", y: " << ppl_locs->people[i].pos.y << endl;
+            << ppl_locs->people[i].pos.x << ", y: " << ppl_locs->people[i].pos.y 
+            << " with reliability: " << ppl_locs->people[i].reliability << endl;
     }
 }
 
