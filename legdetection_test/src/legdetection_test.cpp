@@ -39,6 +39,7 @@ int main(int argc, char **argv)
     double trajectory[2];
       
     while (ros::ok()) {
+        cin.get();
         ros::spinOnce();
         cout << "Currently at x: " << curr_loc[0] << ", y: " << curr_loc[1] << endl;
         trajectory[0] = curr_loc[0] + person_loc[0];
@@ -46,7 +47,6 @@ int main(int argc, char **argv)
         cout << "Person detected at x: " << trajectory[0] << ", y: " << trajectory[1] << endl;
         cin.get();
         move_turtle_bot(trajectory[0],trajectory[1],0.0);
-        cin.get();        
     }
     
     return 0;
