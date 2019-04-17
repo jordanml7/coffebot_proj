@@ -26,11 +26,11 @@
 	<include file="$(find tbot2_launch)/launch/amcl_navigation.launch">
 	</include>
 	
-        <!-- launch leg detection -->
-        <node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan_ppl $(find legdetection_test)/config/coffee_leg_detection.yaml" output="screen">
+	<!-- launch leg detection -->
+	<node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan_ppl $(find legdetection_test)/config/coffee_leg_detection.yaml" output="screen">
 	<param name="fixed_frame" value="base_link" />  
-        <param name="leg_reliability_limit" value=0.95 />
-        </node>
+	<param name="leg_reliability_limit" value=0.95 />
+	</node>
 	
 	<!-- launch logging -->
 	<include file="$(find tbot2_launch)/launch/logging.launch">
