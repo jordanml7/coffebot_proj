@@ -8,6 +8,7 @@
 #include "geometry_msgs/PoseArray.h"
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 #include "people_msgs/PositionMeasurementArray.h"
+#include "people_msgs/PositionMeasurement.h"
 
 #include <vector>
 #include <iostream>

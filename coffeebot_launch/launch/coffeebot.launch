@@ -15,6 +15,10 @@
 	<include file="$(find tbot2_sensors)/launch/rplidar.launch">
 	</include>
 	
+	<!-- launch usb cam -->
+	<include file="$(find usb_cam)/launch/usb_cam-test.launch">
+	</include>
+	
 	<!-- launch sound_play so the robot can speak -->
 	<node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
 	
@@ -31,6 +35,10 @@
 	<param name="fixed_frame" value="base_link" />  
 	<param name="leg_reliability_limit" value="0.99" />
 	</node>
+	
+	<!-- launch face detection -->
+	<include file="$(find face_detector)/launch/face_detector_common.launch">
+	</include>
 	
 	<!-- launch logging -->
 	<include file="$(find tbot2_launch)/launch/logging.launch">
