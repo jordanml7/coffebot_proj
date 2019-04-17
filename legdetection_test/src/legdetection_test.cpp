@@ -17,6 +17,7 @@
 using namespace std;
 
 double curr_loc[3];
+double person_loc[2];
 
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
@@ -35,13 +36,17 @@ int main(int argc, char **argv)
     
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
     sleepok(2,n);
+    double trajectory[2];
       
     while (ros::ok()) {
         ros::spinOnce();
-    
         cout << "Currently at x: " << curr_loc[0] << ", y: " << curr_loc[1] << endl;
-        
+        trajectory[0] = curr_loc[0] + person_loc[0];
+        trajectory[1] = curr_loc[1] + person_loc[1];
+        cout << "Person detected at x: " << trajectory[0] << ", y: " << trajectory[1] << endl;
         cin.get();
+        move_turtle_bot(trajectory[0],trajectory[1],0.0);
+        cin.get();        
     }
     
     return 0;
@@ -57,11 +62,18 @@ void sleepok(int t, ros::NodeHandle &nh)
 void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_locs)
 {
     int ppl_meas = ppl_locs->people.size();
-    cout << "Counted " << ppl_meas << " people" << endl;
-    for(int i = 0; i < ppl_meas; i++) {
-        cout << "Person " << i << " recorded at x: " 
-            << ppl_locs->people[i].pos.x << ", y: " << ppl_locs->people[i].pos.y 
-            << " with reliability: " << ppl_locs->people[i].reliability << endl;
+    if (ppl_meas > 0) {
+        int max_i = 0;
+        double reliability = ppl_locs->people[0].reliability;
+        for(int i = 1; i < ppl_meas; i++) {
+            if (ppl_locs->people[i].reliability > reliability) {
+                    reliability = ppl_locs->people[i].reliability;
+                    max_i = i;
+            }
+        }
+        
+        person_loc[0] = ppl_locs->people[max_i].pos.x;
+        person_loc[1] = ppl_locs->people[max_i].pos.y;
     }
 }
 
