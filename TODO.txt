@@ -1,7 +1,5 @@
 Add human detection node for avoiding obstacles
-    Fix lidar issue (were all the correct packages installed?)
-    leg_detection still not working
-    Which topics am I subscribing to?
+    Increase threshold value
 
 Add sensor & arduino for sensing coffee delivery
     How to get arduino readings into the ROS code - ask Jivko!
