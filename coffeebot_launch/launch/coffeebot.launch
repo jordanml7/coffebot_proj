@@ -17,6 +17,7 @@
 	
 	<!-- launch usb cam -->
 	<include file="$(find usb_cam)/launch/usb_cam-test.launch">
+            <param name="video_device" value="/dev/video1" />
 	</include>
 	
 	<!-- launch sound_play so the robot can speak -->
