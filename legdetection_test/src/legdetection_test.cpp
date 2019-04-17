@@ -75,6 +75,11 @@ void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_
         person_loc[0] = ppl_locs->people[max_i].pos.x;
         person_loc[1] = ppl_locs->people[max_i].pos.y;
     }
+    else {
+        cout << "Nobody detected..." << endl;
+        person_loc[0] = 0.0;
+        person_loc[1] = 0.0;
+    }
 }
 
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl)
