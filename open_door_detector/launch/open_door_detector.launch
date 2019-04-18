@@ -1,7 +1,9 @@
 <launch>
 
-  <include file="$(find wheeled_robin_bringup)/launch/minimal_fake.launch" />
-
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch">
+      <!-- any potential arguments go here; need to check if 3D goes on by default or not -->	
+  </include>
+  
   <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
     <arg name="publish_tf"  value="true"/>
     <arg name="rgb_processing" value="true"/> <!-- only required if we use android client -->
@@ -16,5 +18,23 @@
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find open_door_detector)/launch/kinect.rviz" />
   
   <node pkg="open_door_detector" type="detect_open_door" name="detect_open_door" output="screen" />
+
+  	<!-- launch usb cam -->
+	<node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+		<param name="video_device" value="/dev/video1" />
+		<param name="image_width" value="640" />
+		<param name="image_height" value="480" />
+		<param name="pixel_format" value="yuyv" />
+		<param name="camera_frame_id" value="usb_cam" />
+		<param name="io_method" value="mmap"/>
+	</node>
   
+	<node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+		<remap from="image" to="/usb_cam/image_raw"/>
+		<param name="autosize" value="true" />
+  </node>
+  
+  	<!-- launch amcl navigation -->
+	<include file="$(find tbot2_launch)/launch/amcl_navigation.launch">
+</include>
 </launch>
