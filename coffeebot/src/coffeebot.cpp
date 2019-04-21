@@ -59,16 +59,16 @@ int main(int argc, char **argv)
 	sleepok(2,n);
         char name[100];
         cin.getline(name,100);
-        sleep(1);
+        sleepok(2,n);
         
         sayPhrase(1,name,NULL);
         sleepok(2,n);
         char coffee[100];
         cin.getline(coffee,100);
-        sleep(1);
+        sleepok(2,n);
         
         sayPhrase(2,name,coffee);
-        sleepok(2,n);
+        sleepok(8,n);
         cout << "Traveling to: " << coffee_shop[0] << ", " << coffee_shop[1] << endl;   
         move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
         // SWITCH TO WHEN SENSOR ACTIVATED
         
         sayPhrase(4,name,coffee);
-        sleepok(2,n);
+        sleepok(3,n);
         cout << "Returning to: " << home_location[0] << ", " << home_location[1] << endl;
         move_turtle_bot(home_location[0],home_location[1],home_location[2]);
         sleepok(2,n);
