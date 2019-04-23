@@ -4,6 +4,10 @@ project(legdetection_test)
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 
+# we are now using the OpenCV library
+find_package(OpenCV)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -12,11 +16,14 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs
   message_generation
   move_base_msgs
-  people_msgs
   roscpp
   rospy
   sound_play
   tf
+  cv_bridge
+  image_transport
+  sensor_msgs
+  people_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -143,6 +150,13 @@ include_directories(
 add_executable(legdetection_test src/legdetection_test.cpp)
 add_dependencies(legdetection_test  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(legdetection_test ${catkin_LIBRARIES})
+
+# OpenCV examples
+add_executable(cb_face_detector src/cb_face_detector.cpp)
+target_link_libraries(cb_face_detector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(spin_test src/spin_test.cpp)
+target_link_libraries(spin_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

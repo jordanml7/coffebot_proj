@@ -32,12 +32,12 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "move_base_client");
     ros::NodeHandle n;
     
-    // subscriber for position
+    // subscriber for leg position
     ros::Subscriber leg_meas = n.subscribe("/people_tracker_measurements",1,get_leg_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
     
-    // subscriber for position
+    // subscriber for face position
     ros::Subscriber face_meas = n.subscribe("/people_tracker_measurements",1,get_face_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
