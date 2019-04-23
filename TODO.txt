@@ -1,15 +1,15 @@
-Add human detection node for avoiding obstacles
-    Increase threshold value
-    Integrate face_detection - figure out how to get it to run off usb_cam
+Add human detection node for finding and approaching people
+    Publish relative yaw numbers from cb_face_detection and subscribe in leg_detection
+    Calculate corresponding yaw to move bot to orient with found face
+    Compare leg detection data with face detection results to find person
     Once working, have robot start at a random location, locate an individual and approach them.
 
 Add sensor & arduino for sensing coffee delivery
     How to get arduino readings into the ROS code - ask Jivko!
     Use arduino's in 228?
 
-Add speech-to-text capabilities for placing orders
-(http://edu.gaitech.hk/turtlebot/speech-doc.html OR google speech API)
-coffeebot-237919
-    Otherwise, make interface nicer!
+Make nicer interface for text input!
+
+Make a cute little Coffebot sign
 
 Combine with Marlow's elevator functionality!!

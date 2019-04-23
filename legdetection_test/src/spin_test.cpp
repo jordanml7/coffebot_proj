@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     while (ros::ok()) {
         cout << "Yaw at: " << curr_loc[2] << endl;
         cin.get();
-        start_location[2] = start_location[2] + (PI/45);
+        start_location[2] = start_location[2] + (PI/8);
         move_turtle_bot(start_location[0], start_location[1], start_location[2]);
         sleepok(2,n);
     }
