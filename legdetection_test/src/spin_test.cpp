@@ -17,6 +17,8 @@
 
 using namespace std;
 
+#define PI 3.14159265359
+
 double curr_loc[3];
 
 void sleepok(int, ros::NodeHandle &);
@@ -30,12 +32,18 @@ int main(int argc, char **argv)
        
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
     sleepok(2,n);
+    
+    ros::spinOnce();
+    double start_location[3];
+    start_location[0] = curr_loc[0];
+    start_location[1] = curr_loc[1];
+    start_location[2] = curr_loc[2];
       
     while (ros::ok()) {
-        ros::spinOnce();
         cout << "Yaw at: " << curr_loc[2] << endl;
         cin.get();
-        move_turtle_bot(curr_loc[0], curr_loc[1], curr_loc[2]+1);
+        start_location[2] = start_location[2] + (PI/45);
+        move_turtle_bot(start_location[0], start_location[1], start_location[2]);
         sleepok(2,n);
     }
     
