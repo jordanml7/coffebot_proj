@@ -12,6 +12,4 @@ Add speech-to-text capabilities for placing orders
 coffeebot-237919
     Otherwise, make interface nicer!
 
-Attach bluetooth speaker!!
-
 Combine with Marlow's elevator functionality!!

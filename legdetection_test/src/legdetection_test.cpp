@@ -18,11 +18,13 @@
 using namespace std;
 
 double curr_loc[3];
-double person_loc[2];
+double leg_loc[2];
+double face_loc[2];
 
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
-void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_locs);
+void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& leg_locs);
+void get_face_locs(const people_msgs::PositionMeasurement::ConstPtr& face_locs);
 int move_turtle_bot (double, double, double);
 
 int main(int argc, char **argv)
@@ -31,23 +33,30 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
     
     // subscriber for position
-    ros::Subscriber ppl_meas = n.subscribe("/people_tracker_measurements",1,get_person_locs);
+    ros::Subscriber leg_meas = n.subscribe("/people_tracker_measurements",1,get_leg_locs);
+    //sleep for a bit to make sure the sub will work
+    sleepok(2,n);
+    
+    // subscriber for position
+    ros::Subscriber face_meas = n.subscribe("/people_tracker_measurements",1,get_face_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
     
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
     sleepok(2,n);
-    double trajectory[2];
+    double trajectory_legs[2];
+    double trajectory_face[2];
       
     while (ros::ok()) {
         cin.get();
         ros::spinOnce();
         cout << "Currently at x: " << curr_loc[0] << ", y: " << curr_loc[1] << endl;
-        trajectory[0] = curr_loc[0] + person_loc[0];
-        trajectory[1] = curr_loc[1] + person_loc[1];
-        cout << "Person detected at x: " << trajectory[0] << ", y: " << trajectory[1] << endl;
-        cin.get();
-        move_turtle_bot(trajectory[0],trajectory[1],0.0);
+        trajectory_legs[0] = curr_loc[0] + leg_loc[0];
+        trajectory_legs[1] = curr_loc[1] + leg_loc[1];
+        cout << "Legs detected at x: " << trajectory_legs[0] << ", y: " << trajectory_legs[1] << endl;
+        trajectory_face[0] = curr_loc[0] + face_loc[0];
+        trajectory_face[1] = curr_loc[1] + face_loc[1];
+        cout << "Face detected at x: " << trajectory_face[0] << ", y: " << trajectory_face[1] << endl;
     }
     
     return 0;
@@ -60,27 +69,33 @@ void sleepok(int t, ros::NodeHandle &nh)
         sleep(t);
 }
 
-void get_person_locs(const people_msgs::PositionMeasurementArray::ConstPtr& ppl_locs)
+void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& leg_locs)
 {
-    int ppl_meas = ppl_locs->people.size();
+    int ppl_meas = leg_locs->people.size();
     if (ppl_meas > 0) {
         int max_i = 0;
-        double reliability = ppl_locs->people[0].reliability;
+        double reliability = leg_locs->people[0].reliability;
         for(int i = 1; i < ppl_meas; i++) {
-            if (ppl_locs->people[i].reliability > reliability) {
-                    reliability = ppl_locs->people[i].reliability;
+            if (leg_locs->people[i].reliability > reliability) {
+                    reliability = leg_locs->people[i].reliability;
                     max_i = i;
             }
         }
         
-        person_loc[0] = ppl_locs->people[max_i].pos.x;
-        person_loc[1] = ppl_locs->people[max_i].pos.y;
+        leg_loc[0] = leg_locs->people[max_i].pos.x;
+        leg_loc[1] = leg_locs->people[max_i].pos.y;
     }
     else {
         cout << "Nobody detected..." << endl;
-        person_loc[0] = 0.0;
-        person_loc[1] = 0.0;
+        leg_loc[0] = 0.0;
+        leg_loc[1] = 0.0;
     }
+}
+
+void get_face_locs(const people_msgs::PositionMeasurement::ConstPtr& face_locs)
+{
+    face_loc[0] = face_locs->pos.x;
+    face_loc[1] = face_locs->pos.y;
 }
 
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl)
