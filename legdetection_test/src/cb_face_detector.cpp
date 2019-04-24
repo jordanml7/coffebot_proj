@@ -5,6 +5,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
+#include <std_msgs/Float64MultiArray.h>
+#include <vector>
 
 using namespace cv;
 using namespace std;
@@ -23,7 +25,7 @@ class ImageConverter
         // Subscrive to input video feed and publish output video feed
         image_sub_ = it_.subscribe("/usb_cam/rgb/image_raw", 1, &ImageConverter::imageCb, this);
         image_pub_ = it_.advertise("/image_converter/output_video", 1);
-        //face_loc_pub_ = nh_.advertise("/std_msgs/
+        face_loc_pub_ = nh_.advertise<std_msgs::Float64MultiArray>("rel_yaw_frac", 1);
     }
 
     ~ImageConverter()
@@ -33,7 +35,9 @@ class ImageConverter
     
     void detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale) 
     { 
-        vector<Rect> faces, faces2; 
+        vector<Rect> faces, faces2;
+        vector<double> rel_yaw_frac;
+        std_msgs::Float64MultiArray array_msg;
         Mat gray, smallImg; 
 
         cvtColor( img, gray, COLOR_BGR2GRAY );          // Convert to Gray Scale 
@@ -46,9 +50,7 @@ class ImageConverter
         // Detect faces of different sizes using cascade classifier  
         cascade.detectMultiScale( smallImg, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) ); 
         
-        // 10 is filler value that will be replaced for all faces found (up to 10 faces)
-        double rel_yaw_frac[] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
-        
+        rel_yaw_frac.resize(faces.size());
         // Draw circles around the faces
         for ( size_t i = 0; i < faces.size(); i++ ) 
         {
@@ -59,14 +61,15 @@ class ImageConverter
             center.x = cvRound((r.x + r.width*0.5)*scale); 
             center.y = cvRound((r.y + r.height*0.5)*scale);
             cout << "Face centered at " <<  center.x <<  endl;
-            if (i < 10)
-                rel_yaw_frac[i] = center.x/(smallImg.cols/2) - 1;
+            rel_yaw_frac[i] = center.x/(smallImg.cols/2) - 1;
             
             rectangle( img, cvPoint(cvRound(r.x*scale), cvRound(r.y*scale)), 
                 cvPoint(cvRound((r.x + r.width-1)*scale),  
                     cvRound((r.y + r.height-1)*scale)), color, 3, 8, 0);
         } 
         
+        array_msg.data = rel_yaw_frac;
+        face_loc_pub_.publish(array_msg);
         // Show Processed Image with detected faces 
         imshow( "Face Detection", img );  
     } 

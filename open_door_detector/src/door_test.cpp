@@ -37,17 +37,17 @@ int main(int argc, char **argv)
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",100,get_turtle_bot_loc);
 
     ros::init(argc, argv, "open_door_detector_client");
-    ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door); 
+    ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door"); 
     open_door_detector::detect_open_door doorSrv;
-    srv.request.aperature_angle = atoll(argv[1]);
-    srv.request.wall_distance = atoll(argv[2]);
-    srv.request.min_door_width = atoll(argv[3]);
+    doorSrv.request.aperature_angle = atoll(argv[1]);
+    doorSrv.request.wall_distance = atoll(argv[2]);
+    doorSrv.request.min_door_width = atoll(argv[3]);
 
     
-    double elevator1[4] = {0.0, 0.0, 1.0, 0.0} //x, y, z, yaw
-    double elevator2[4] = {-2.013, 11.701, 2.0, 0.0}
+    double elevator1[4] = {0.0, 0.0, 1.0, 0.0}; //x, y, z, yaw
+    double elevator2[4] = {-2.013, 11.701, 2.0, 0.0};
     
-    double home_location[3] = {21.8, 13.9, 2.0, 0.0}
+    double home_location[4] = {21.8, 13.9, 2.0, 0.0};
     
     while (ros::ok()) {
         ros::spinOnce();
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
         
         if(doorClient.call(doorSrv))
         {
-            ROS_INFO(door_srv.response.door_pos)
+            ROS_INFO(doorSrv.response.door_pos);
         }
         else
         {

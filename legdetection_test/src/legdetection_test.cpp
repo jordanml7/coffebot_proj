@@ -4,11 +4,12 @@
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_listener.h>
 #include <actionlib/server/simple_action_server.h>
-#include "geometry_msgs/Pose.h"
-#include "geometry_msgs/PoseArray.h"
-#include "geometry_msgs/PoseWithCovarianceStamped.h"
-#include "people_msgs/PositionMeasurementArray.h"
-#include "people_msgs/PositionMeasurement.h"
+#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseArray.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <people_msgs/PositionMeasurementArray.h>
+#include <people_msgs/PositionMeasurement.h>
+#include <std_msgs/Float64MultiArray.h>
 
 #include <vector>
 #include <iostream>
@@ -18,13 +19,14 @@
 using namespace std;
 
 double curr_loc[3];
-double leg_loc[2];
-double face_loc[2];
+vector<double> leg_locs;
+vector<double> face_locs;
 
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
-void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& leg_locs);
-void get_face_locs(const people_msgs::PositionMeasurement::ConstPtr& face_locs);
+void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& input_legs);
+void get_face_locs(const std_msgs::Float64MultiArray::ConstPtr& input_faces);
+int find_people();
 int move_turtle_bot (double, double, double);
 
 int main(int argc, char **argv)
@@ -38,7 +40,7 @@ int main(int argc, char **argv)
     sleepok(2,n);
     
     // subscriber for face position
-    ros::Subscriber face_meas = n.subscribe("/people_tracker_measurements",1,get_face_locs);
+    ros::Subscriber face_meas = n.subscribe("rel_yaw_frac",1,get_face_locs);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
     
@@ -50,13 +52,6 @@ int main(int argc, char **argv)
     while (ros::ok()) {
         cin.get();
         ros::spinOnce();
-        cout << "Currently at x: " << curr_loc[0] << ", y: " << curr_loc[1] << endl;
-        trajectory_legs[0] = curr_loc[0] + leg_loc[0];
-        trajectory_legs[1] = curr_loc[1] + leg_loc[1];
-        cout << "Legs detected at x: " << trajectory_legs[0] << ", y: " << trajectory_legs[1] << endl;
-        trajectory_face[0] = curr_loc[0] + face_loc[0];
-        trajectory_face[1] = curr_loc[1] + face_loc[1];
-        cout << "Face detected at x: " << trajectory_face[0] << ", y: " << trajectory_face[1] << endl;
     }
     
     return 0;
@@ -69,33 +64,29 @@ void sleepok(int t, ros::NodeHandle &nh)
         sleep(t);
 }
 
-void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& leg_locs)
+void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& input_legs)
 {
-    int ppl_meas = leg_locs->people.size();
-    if (ppl_meas > 0) {
-        int max_i = 0;
-        double reliability = leg_locs->people[0].reliability;
-        for(int i = 1; i < ppl_meas; i++) {
-            if (leg_locs->people[i].reliability > reliability) {
-                    reliability = leg_locs->people[i].reliability;
-                    max_i = i;
-            }
-        }
-        
-        leg_loc[0] = leg_locs->people[max_i].pos.x;
-        leg_loc[1] = leg_locs->people[max_i].pos.y;
-    }
-    else {
-        cout << "Nobody detected..." << endl;
-        leg_loc[0] = 0.0;
-        leg_loc[1] = 0.0;
+    int ppl_meas = input_legs->people.size();
+    leg_locs.resize(2*ppl_meas);
+    int j = 0;
+    for(int i = 0; i < ppl_meas; i++) {
+        leg_locs[j] = input_legs->people[i].pos.x;
+        leg_locs[j+1] = input_legs->people[i].pos.y;
+        j += 2;
     }
 }
 
-void get_face_locs(const people_msgs::PositionMeasurement::ConstPtr& face_locs)
+void get_face_locs(const std_msgs::Float64MultiArray::ConstPtr& input_faces)
 {
-    face_loc[0] = face_locs->pos.x;
-    face_loc[1] = face_locs->pos.y;
+    int ppl_meas = input_faces->data.size();
+    face_locs.resize(ppl_meas);
+    for (int i = 0; i < ppl_meas; i++)
+        face_locs[i] = input_faces->data[i];
+}
+
+int find_people()
+{
+    
 }
 
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl)
