@@ -1,24 +1,10 @@
 <launch>
 
-  <include file="$(find turtlebot_bringup)/launch/minimal.launch">
-      <!-- any potential arguments go here; need to check if 3D goes on by default or not -->	
-  </include>
-  
-  <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
-    <arg name="publish_tf"  value="true"/>
-    <arg name="rgb_processing" value="true"/> <!-- only required if we use android client -->
-    <arg name="depth_processing" value="true"/>
-    <arg name="depth_registered_processing" value="false"/>
-    <arg name="depth_registration" value="false"/>
-    <arg name="disparity_processing" value="false"/>
-    <arg name="disparity_registered_processing" value="false"/>
-    <arg name="scan_processing" value="true"/>
-  </include>
+  <include file="$(find tbot2_launch)/launch/tbot2.launch" />
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find open_door_detector)/launch/kinect.rviz" />
-  
+
   <node pkg="open_door_detector" type="detect_open_door" name="detect_open_door" output="screen" />
-
+  
    <!-- launch usb cam -->
   <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
     <param name="video_device" value="/dev/video1" />
