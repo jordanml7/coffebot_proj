@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     double home_location[3] = {21.8,13.9,0.0};
     
     // coffee shop is currently at the top of the stairs
-    double coffee_shop[3] = {12.23,20.77,-1.746};
+    double coffee_shop[3] = {-0.8737,1.3296,-1.746};
   
     while (ros::ok()) {
         
@@ -137,7 +137,7 @@ void sayPhrase(int m, char name[], char coffee[])
 {
     sound_play::SoundClient S;
 
-    string startMsg = "Hello, I'm Coffeebot. What's your name?";
+    string startMsg = "Hello. I'm Coffee Bot. What's your name?";
     char coffeeRqst[100];
     sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
     char coffeeCnfm[100];
