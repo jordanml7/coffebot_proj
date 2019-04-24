@@ -5,12 +5,18 @@ project(open_door_detector)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  actionlib
+  actionlib_msgs
+  message_generation
+  move_base_msgs
   roscpp
   rospy
-  std_msgs
-  geometry_msgs
+  sound_play
+  tf
+  cv_bridge
+  image_transport
   sensor_msgs
-  message_generation
+  people_msgs
 )
 
 ## System dependencies are found with CMake's conventions

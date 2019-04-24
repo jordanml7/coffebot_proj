@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "open_door_detector_client");
     ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door"); 
     open_door_detector::detect_open_door doorSrv;
-    doorSrv.request.aperature_angle = atoll(argv[1]);
+    doorSrv.request.aperture_angle = atoll(argv[1]);
     doorSrv.request.wall_distance = atoll(argv[2]);
     doorSrv.request.min_door_width = atoll(argv[3]);
 
@@ -59,7 +59,10 @@ int main(int argc, char **argv)
         
         if(doorClient.call(doorSrv))
         {
-            ROS_INFO(doorSrv.response.door_pos);
+            cout << doorSrv.response.door_pos.pose.position.x;
+            cout << doorSrv.response.door_pos.pose.position.y;
+            cout << doorSrv.response.door_pos.pose.position.z;
+//            cout << doorSrv.response.door_pos.pose
         }
         else
         {
