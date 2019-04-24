@@ -43,8 +43,8 @@ int main(int argc, char **argv)
     // this will be reset based on starting location
     double home_location[3] = {21.8,13.9,0.0};
     
-    // coffee shop is currently right outside kitchenette
-    double coffee_shop[3] = {5.8,13.9,0.0};
+    // coffee shop is currently at the top of the stairs
+    double coffee_shop[3] = {-0.87,1.33,-1.746};
   
     while (ros::ok()) {
         
@@ -137,13 +137,13 @@ void sayPhrase(int m, char name[], char coffee[])
 {
     sound_play::SoundClient S;
 
-    string startMsg = "Hello, what's your name?";
+    string startMsg = "Hello, I'm Coffeebot. What's your name?";
     char coffeeRqst[100];
     sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
     char coffeeCnfm[100];
     sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.",coffee);
     char coffeeOrdr[100];
-    sprintf(coffeeOrdr,"Hi! Could I please get a %s? Please press enter to tell me it's done.",coffee);
+    sprintf(coffeeOrdr,"Hi! Could I please get a %s?",coffee);
     string thankYou = "Thank You!";
     char coffeeRtrn[100];
     sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
