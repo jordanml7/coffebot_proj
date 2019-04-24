@@ -23,7 +23,7 @@ class ImageConverter
         // Subscrive to input video feed and publish output video feed
         image_sub_ = it_.subscribe("/usb_cam/rgb/image_raw", 1, &ImageConverter::imageCb, this);
         image_pub_ = it_.advertise("/image_converter/output_video", 1);
-        face_loc_pub_ = nh_.advertise("/std_msgs/
+        //face_loc_pub_ = nh_.advertise("/std_msgs/
     }
 
     ~ImageConverter()
@@ -47,7 +47,7 @@ class ImageConverter
         cascade.detectMultiScale( smallImg, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) ); 
         
         // 10 is filler value that will be replaced for all faces found (up to 10 faces)
-        double rel_yaw_frac = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+        double rel_yaw_frac[] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
         
         // Draw circles around the faces
         for ( size_t i = 0; i < faces.size(); i++ ) 
