@@ -43,8 +43,8 @@ int main(int argc, char **argv)
     // this will be reset based on starting location
     double home_location[3] = {21.8,13.9,0.0};
     
-    // coffee shop is currently right outside kitchenette
-    double coffee_shop[3] = {5.8,13.9,0.0};
+    // coffee shop is currently at the top of the stairs
+    double coffee_shop[3] = {-0.87,1.33,-1.746};
   
     while (ros::ok()) {
         
