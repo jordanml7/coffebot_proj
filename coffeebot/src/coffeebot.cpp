@@ -4,25 +4,25 @@
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_listener.h>
 #include <actionlib/server/simple_action_server.h>
-#include "geometry_msgs/Pose.h"
-#include "geometry_msgs/PoseArray.h"
-#include "geometry_msgs/PoseWithCovarianceStamped.h"
-
-#include <sound_play/sound_play.h>
-#include <sound_play/SoundRequest.h>
-
 #include <vector>
 #include <iostream>
 #include <string>
 #include <stdio.h>
 
+#include "geometry_msgs/PoseWithCovarianceStamped.h"
+#include "sound_play/sound_play.h"
+#include "sound_play/SoundRequest.h"
+#include "std_msgs/Bool.h"
+
 using namespace std;
 
 double curr_loc[3];
+bool press_sense;
 
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 int move_turtle_bot (double, double, double);
+void detect_coffee(const std_msgs::Bool& msg);
 void sayPhrase(int, char[], char[]);
 
 int main(int argc, char **argv)
@@ -31,12 +31,17 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
     
     // subscriber for position
-    ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",100,get_turtle_bot_loc);
+    ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
+    //sleep for a bit to make sure the sub will work
+    sleepok(2,n);
+    
+    // subscriber for arduino sensor msgs
+    ros::Subscriber coffee_detect = n.subscribe("/coffee_topic",1,detect_coffee);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
     
     // publisher for sound
-    ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound", 1);
+    ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound",1);
     //sleep for a bit to make sure the pub will work
     sleepok(2,n);
     
@@ -55,34 +60,55 @@ int main(int argc, char **argv)
         cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
         // Maybe detect a person in a room and approach them, then record this location?
         
+        // Greet and ask for user's name
         sayPhrase(0,NULL,NULL);
 		sleepok(2,n);
         char name[100];
         cin.getline(name,100);
         sleepok(2,n);
         
+        // Ask for user's coffee order
         sayPhrase(1,name,NULL);
         sleepok(2,n);
         char coffee[100];
         cin.getline(coffee,100);
         sleepok(2,n);
         
+        // Order recieved
         sayPhrase(2,name,coffee);
         sleepok(8,n);
+        
+        // Headed to the coffeeshop!
         cout << "Traveling to: " << coffee_shop[0] << ", " << coffee_shop[1] << endl;   
         move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
         sleepok(2,n);
 
+		// Place coffee order
         sayPhrase(3,name,coffee);
-        sleepok(2,n);
-        //switch to sensor
+        sleepok(4,n);
         
+        // Wait for sensor to read that coffee has been given
+        int waiting = 0;
+        while(!press_sense) {
+			ros::spinOnce();
+			sleep(1);
+			waiting += 1;
+			if(waiting % 10 == 0) {
+				sayPhrase(6,NULL,NULL);
+				sleepok(4,n);
+			}
+		}
+        
+        // Thank server for coffee
         sayPhrase(4,name,coffee);
-        sleepok(3,n);
+        sleepok(2,n);
+        
+        // Headed back to the user!
         cout << "Returning to: " << home_location[0] << ", " << home_location[1] << endl;
         move_turtle_bot(home_location[0],home_location[1],home_location[2]);
         sleepok(2,n);
         
+        // Deliver coffee
         sayPhrase(5,name,coffee);
         sleepok(2,n);
         
@@ -105,6 +131,11 @@ void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr
     curr_loc[0] = sub_amcl->pose.pose.position.x;
     curr_loc[1] = sub_amcl->pose.pose.position.y;
     curr_loc[2] = tf::getYaw(sub_amcl->pose.pose.orientation);
+}
+
+void detect_coffee(const std_msgs::Bool& msg)
+{
+	press_sense = msg.data;
 }
 
 int move_turtle_bot (double x, double y, double yaw)
@@ -142,12 +173,13 @@ void sayPhrase(int m, char name[], char coffee[])
     char coffeeCnfm[100];
     sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.",coffee);
 	char coffeeOrdr[100];
-    sprintf(coffeeOrdr,"Hi! Could I please get a %s?",coffee);
+    sprintf(coffeeOrdr,"Hi! Could I please get a %s? Please place it in my cupholder when it's ready.",coffee);
     string thankYou = "Thank You!";
     char coffeeRtrn[100];
     sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
+    string waitingMsg = "Is everything alright? I've been waiting a while.";
 
-    string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
+    string messages[7] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn,waitingMsg};
     
     S.say(messages[m]);
     cout << messages[m] << endl;
