@@ -8,13 +8,9 @@ project(sensor_test)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  actionlib
-  actionlib_msgs
-  message_generation
-  move_base_msgs
   roscpp
   rospy
-  sound_play
+  std_msgs
   tf
 )
 

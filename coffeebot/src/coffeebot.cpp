@@ -23,7 +23,7 @@ double curr_loc[3];
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 int move_turtle_bot (double, double, double);
-void sayPhrase(int, char [], char []);
+void sayPhrase(int, char[], char[]);
 
 int main(int argc, char **argv)
 {
@@ -75,8 +75,7 @@ int main(int argc, char **argv)
 
         sayPhrase(3,name,coffee);
         sleepok(2,n);
-        cin.get();
-        // SWITCH TO WHEN SENSOR ACTIVATED
+        //switch to sensor
         
         sayPhrase(4,name,coffee);
         sleepok(3,n);
@@ -142,7 +141,7 @@ void sayPhrase(int m, char name[], char coffee[])
     sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
     char coffeeCnfm[100];
     sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.",coffee);
-    char coffeeOrdr[100];
+	char coffeeOrdr[100];
     sprintf(coffeeOrdr,"Hi! Could I please get a %s?",coffee);
     string thankYou = "Thank You!";
     char coffeeRtrn[100];
