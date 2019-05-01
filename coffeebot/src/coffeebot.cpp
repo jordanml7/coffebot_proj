@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         // Maybe detect a person in a room and approach them, then record this location?
         
         sayPhrase(0,NULL,NULL);
-	sleepok(2,n);
+		sleepok(2,n);
         char name[100];
         cin.getline(name,100);
         sleepok(2,n);
@@ -152,4 +152,18 @@ void sayPhrase(int m, char name[], char coffee[])
     
     S.say(messages[m]);
     cout << messages[m] << endl;
+    if(m == 0) {
+		cout << "*******************************" << endl;
+		cout << "*                             *" << endl;
+		cout << "*   Please Enter Your Name:   *" << endl;
+		cout << "*                             *" << endl;
+		cout << "*******************************" << endl;
+	}
+	if(m == 1) {
+		cout << "***************************************" << endl;
+		cout << "*                                     *" << endl;
+		cout << "*   Please Enter Your Coffee Order:   *" << endl;
+		cout << "*                                     *" << endl;
+		cout << "***************************************" << endl;
+	}
 }
