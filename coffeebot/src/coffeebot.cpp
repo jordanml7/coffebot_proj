@@ -23,7 +23,7 @@ double curr_loc[3];
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 int move_turtle_bot (double, double, double);
-void sayPhrase(int, char [], char []);
+void sayPhrase(int);
 
 int main(int argc, char **argv)
 {
@@ -48,43 +48,13 @@ int main(int argc, char **argv)
   
     while (ros::ok()) {
         
-        ros::spinOnce();
-        home_location[0] = curr_loc[0];
-        home_location[1] = curr_loc[1];
-        home_location[2] = curr_loc[2];
-        cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
-        // Maybe detect a person in a room and approach them, then record this location?
-        
-        sayPhrase(0,NULL,NULL);
-	sleepok(2,n);
-        char name[100];
-        cin.getline(name,100);
-        sleepok(2,n);
-        
-        sayPhrase(1,name,NULL);
-        sleepok(2,n);
-        char coffee[100];
-        cin.getline(coffee,100);
-        sleepok(2,n);
-        
-        sayPhrase(2,name,coffee);
-        sleepok(8,n);
-        cout << "Traveling to: " << coffee_shop[0] << ", " << coffee_shop[1] << endl;   
-        move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
-        sleepok(2,n);
-
-        sayPhrase(3,name,coffee);
-        sleepok(2,n);
+        sayPhrase(4);
         cin.get();
-        // SWITCH TO WHEN SENSOR ACTIVATED
-        
-        sayPhrase(4,name,coffee);
-        sleepok(3,n);
         cout << "Returning to: " << home_location[0] << ", " << home_location[1] << endl;
-        move_turtle_bot(home_location[0],home_location[1],home_location[2]);
-        sleepok(2,n);
+        //move_turtle_bot(home_location[0],home_location[1],home_location[2]);
+        cin.get();
         
-        sayPhrase(5,name,coffee);
+        sayPhrase(5);
         sleepok(2,n);
         
         break;
@@ -133,20 +103,21 @@ int move_turtle_bot (double x, double y, double yaw)
     return 0;
 }
 
-void sayPhrase(int m, char name[], char coffee[])
+void sayPhrase(int m)
 {
     sound_play::SoundClient S;
 
     string startMsg = "Hello. I'm Coffee Bot. What's your name?";
     char coffeeRqst[100];
-    sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
+    sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?","jordan"
+);
     char coffeeCnfm[100];
-    sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.",coffee);
+    sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.","coffee");
     char coffeeOrdr[100];
-    sprintf(coffeeOrdr,"Hi! Could I please get a %s?",coffee);
+    sprintf(coffeeOrdr,"Hi! Could I please get a %s?","coffee");
     string thankYou = "Thank You!";
     char coffeeRtrn[100];
-    sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
+    sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!","Jordan","coffee");
 
     string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
     
