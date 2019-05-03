@@ -4,6 +4,8 @@ Add human detection node for finding and approaching people
     Compare leg detection data with face detection results to find person
     Once working, have robot start at a random location, locate an individual and approach them.
 
+	ISSUES: leg detector isn't reporting any legs. Still unsure how to calculate yaw from face locations and what comparison threshold should be
+
 Make a cute little Coffebot sign
 
 Combine with Marlow's elevator functionality!!
