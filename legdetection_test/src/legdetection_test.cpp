@@ -52,6 +52,7 @@ int main(int argc, char **argv)
     sleepok(2,n);
       
     while (ros::ok()) {
+		cout << "Ready to find person" << endl;
         cin.get();
         ros::spinOnce();
         if(find_person(0.2))
@@ -93,6 +94,7 @@ bool find_person(double threshold)
 	double myX = curr_loc[0];
 	double myY = curr_loc[1];
     double myYaw = curr_loc[2];
+    cout << "Currently at x: " << myX << ", y: " << myY << ", yaw: " << myYaw << endl;
     
     int legs = leg_locs.size();
     int faces = face_locs.size();
@@ -100,8 +102,10 @@ bool find_person(double threshold)
 		double thisX = leg_locs[i];
 		double thisY = leg_locs[i+1];
 		double legs_Yaw = atan((thisY-myY)/(thisX-myX));
+		cout << "Legs at x: " << thisX << ", y: " << thisY << ", yaw: " << legs_Yaw << endl;
 		for(int j = 0; j < faces; j++) {
 			double face_Yaw = face_locs[i];
+			cout << "Face at yaw: " << face_Yaw << endl;
 			if((face_Yaw > legs_Yaw-threshold) && (face_Yaw < legs_Yaw+threshold)) {
 				person_loc[0] = thisX;
 				person_loc[1] = thisY;
