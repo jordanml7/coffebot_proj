@@ -48,8 +48,11 @@
 	
 	<!-- launch leg detection -->
 	<node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan_ppl $(find legdetection_test)/config/coffee_leg_detection.yaml" output="screen">
-		<param name="fixed_frame" value="base_link" />  
 		<param name="leg_reliability_limit" value="0.99" />
+	</node>
+	
+	<!-- launch cb_face_detector -->
+	<node pkg="legdetection_test" type="cb_face_detector" name="cb_face_detector">
 	</node>
 	
 	<!-- launch logging -->

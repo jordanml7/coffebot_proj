@@ -67,15 +67,32 @@ int main(int argc, char **argv)
         cin.getline(name,100);
         sleepok(2,n);
         
+        while(true) {
+			sayPhrase(1,name,NULL);
+			sleepok(2,n);
+			char response[10];
+			cin.getline(response,10);
+			if(strcmp(response,"No") == 0 | strcmp(response,"no") == 0) {
+				sayPhrase(2,name,NULL);
+				sleepok(2,n);
+				return -1; // replace with detect next person
+			}
+			else if (strcmp(response,"Yes") == 0 | strcmp(response,"yes") == 0) {
+				sleepok(2,n);
+				break;
+			}
+			sleepok(5,n);
+		}
+        
         // Ask for user's coffee order
-        sayPhrase(1,name,NULL);
+        sayPhrase(3,NULL,NULL);
         sleepok(2,n);
         char coffee[100];
         cin.getline(coffee,100);
         sleepok(2,n);
         
         // Order recieved
-        sayPhrase(2,name,coffee);
+        sayPhrase(4,NULL,coffee);
         sleepok(8,n);
         
         // Headed to the coffeeshop!
@@ -84,7 +101,7 @@ int main(int argc, char **argv)
         sleepok(2,n);
 
 		// Place coffee order
-        sayPhrase(3,name,coffee);
+        sayPhrase(5,NULL,coffee);
         sleepok(4,n);
         
         // Wait for sensor to read that coffee has been given
@@ -100,7 +117,7 @@ int main(int argc, char **argv)
 		}
         
         // Thank server for coffee
-        sayPhrase(4,name,coffee);
+        sayPhrase(7,NULL,NULL);
         sleepok(2,n);
         
         // Headed back to the user!
@@ -109,11 +126,10 @@ int main(int argc, char **argv)
         sleepok(2,n);
         
         // Deliver coffee
-        sayPhrase(5,name,coffee);
+        sayPhrase(8,name,coffee);
         sleepok(2,n);
         
-        break;
-        // Update home_location to next person detected?
+        return -1;// Update home_location to next person detected?
     }
     
     return 0;
@@ -169,17 +185,20 @@ void sayPhrase(int m, char name[], char coffee[])
 
     string startMsg = "Hello. I'm Coffee Bot. What's your name?";
     char coffeeRqst[100];
-    sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
+    sprintf(coffeeRqst,"Hi there, %s! Would you like a coffee?",name);
+    string negRspn = "Okay then, have a nice day!";
+    string takeOrder = "Great! What coffee can I get for you?";
     char coffeeCnfm[100];
-    sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.",coffee);
-	char coffeeOrdr[100];
-    sprintf(coffeeOrdr,"Hi! Could I please get a %s? Please place it in my cupholder when it's ready.",coffee);
+    sprintf(coffeeCnfm,"I'll be back with your %s in just a few moments. Wait here.",coffee);
+	char placeOrdr[100];
+    sprintf(placeOrdr,"Hi! Could I please get a %s? Please place it in my cupholder when it's ready.",coffee);
+    string waitingMsg = "Is everything alright? I've been waiting a while.";
     string thankYou = "Thank You!";
     char coffeeRtrn[100];
     sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
-    string waitingMsg = "Is everything alright? I've been waiting a while.";
 
-    string messages[7] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn,waitingMsg};
+    string messages[9] = {startMsg,coffeeRqst,negRspn, \
+		takeOrder,coffeeCnfm,placeOrdr,waitingMsg,thankYou,coffeeRtrn};
     
     S.say(messages[m]);
     cout << messages[m] << endl;
@@ -191,6 +210,13 @@ void sayPhrase(int m, char name[], char coffee[])
 		cout << "*******************************" << endl;
 	}
 	if(m == 1) {
+		cout << "*****************************************" << endl;
+		cout << "*                                       *" << endl;
+		cout << "*   Would you like a coffee? (Yes/No)   *" << endl;
+		cout << "*                                       *" << endl;
+		cout << "*****************************************" << endl;
+	}
+	if(m == 3) {
 		cout << "***************************************" << endl;
 		cout << "*                                     *" << endl;
 		cout << "*   Please Enter Your Coffee Order:   *" << endl;

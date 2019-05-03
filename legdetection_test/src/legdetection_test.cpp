@@ -15,10 +15,14 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <math.h>
 
 using namespace std;
 
+#define PI 3.14159265359
+
 double curr_loc[3];
+double person_loc[3];
 vector<double> leg_locs;
 vector<double> face_locs;
 
@@ -26,7 +30,7 @@ void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& input_legs);
 void get_face_locs(const std_msgs::Float64MultiArray::ConstPtr& input_faces);
-int find_people();
+bool find_person(double);
 int move_turtle_bot (double, double, double);
 
 int main(int argc, char **argv)
@@ -46,12 +50,12 @@ int main(int argc, char **argv)
     
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
     sleepok(2,n);
-    double trajectory_legs[2];
-    double trajectory_face[2];
       
     while (ros::ok()) {
         cin.get();
         ros::spinOnce();
+        if(find_person(0.2))
+			move_turtle_bot(person_loc[0],person_loc[1],person_loc[2]);
     }
     
     return 0;
@@ -81,12 +85,32 @@ void get_face_locs(const std_msgs::Float64MultiArray::ConstPtr& input_faces)
     int ppl_meas = input_faces->data.size();
     face_locs.resize(ppl_meas);
     for (int i = 0; i < ppl_meas; i++)
-        face_locs[i] = input_faces->data[i];
+        face_locs[i] = PI*input_faces->data[i];
 }
 
-int find_people()
+bool find_person(double threshold)
 {
+	double myX = curr_loc[0];
+	double myY = curr_loc[1];
+    double myYaw = curr_loc[2];
     
+    int legs = leg_locs.size();
+    int faces = face_locs.size();
+    for(int i = 0; i < legs; i += 2) {
+		double thisX = leg_locs[i];
+		double thisY = leg_locs[i+1];
+		double legs_Yaw = atan((thisY-myY)/(thisX-myX));
+		for(int j = 0; j < faces; j++) {
+			double face_Yaw = face_locs[i];
+			if((face_Yaw > legs_Yaw-threshold) && (face_Yaw < legs_Yaw+threshold)) {
+				person_loc[0] = thisX;
+				person_loc[1] = thisY;
+				person_loc[2] = legs_Yaw;
+				return true;
+			}
+		}
+	}
+	return false;	
 }
 
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl)

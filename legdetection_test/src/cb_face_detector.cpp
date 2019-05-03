@@ -61,11 +61,11 @@ class ImageConverter
             center.x = cvRound((r.x + r.width*0.5)*scale); 
             center.y = cvRound((r.y + r.height*0.5)*scale);
             cout << "Face centered at " <<  center.x <<  endl;
-            rel_yaw_frac[i] = center.x/(smallImg.cols/2) - 1;
+            rel_yaw_frac[i] = (double)center.x/((double)smallImg.cols/2) - 1;
             
             rectangle( img, cvPoint(cvRound(r.x*scale), cvRound(r.y*scale)), 
-                cvPoint(cvRound((r.x + r.width-1)*scale),  
-                    cvRound((r.y + r.height-1)*scale)), color, 3, 8, 0);
+                cvPoint(cvRound((r.x + r.width)*scale),  
+                    cvRound((r.y + r.height)*scale)), color, 3, 8, 0);
         } 
         
         array_msg.data = rel_yaw_frac;
@@ -88,7 +88,6 @@ class ImageConverter
         //declare output image
         Mat outImg;
         outImg = cv_ptr->image.clone();
-        cout <<  "Image size: " <<  outImg.rows << " by " << outImg.cols << endl;
         
         // PreDefined trained XML classifiers with facial features 
         CascadeClassifier cascade, nestedCascade;  
@@ -114,7 +113,7 @@ int main(int argc, char** argv)
     ImageConverter ic;
     while (ros::ok()) {
         ros::spinOnce();
-        sleep(0.1);
+        sleep(1);
     }
     return 0;
 }

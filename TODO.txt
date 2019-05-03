@@ -4,10 +4,6 @@ Add human detection node for finding and approaching people
     Compare leg detection data with face detection results to find person
     Once working, have robot start at a random location, locate an individual and approach them.
 
-Implement "no thank you" abilitiy
-
-Make nicer interface for text input!
-
 Make a cute little Coffebot sign
 
 Combine with Marlow's elevator functionality!!
