@@ -4,9 +4,7 @@ Add human detection node for finding and approaching people
     Compare leg detection data with face detection results to find person
     Once working, have robot start at a random location, locate an individual and approach them.
 
-Add sensor & arduino for sensing coffee delivery
-    How to get arduino readings into the ROS code - ask Jivko!
-    Use arduino's in 228?
+Implement "no thank you" abilitiy
 
 Make nicer interface for text input!
 
