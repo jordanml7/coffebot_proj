@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <tf/tf.h>
+#include <publisher.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_listener.h>
@@ -25,7 +26,7 @@ double curr_loc[4];
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 int move_turtle_bot (double, double, double);
-void sayPhrase(int, char [], char []);
+void say_phrase(int, char [], char []);
 
 int main(int argc, char **argv)
 {
@@ -36,44 +37,63 @@ int main(int argc, char **argv)
     // subscriber for position
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",100,get_turtle_bot_loc);
 
+    //Start open door detecting service
     ros::init(argc, argv, "open_door_detector_client");
     ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door"); 
     open_door_detector::detect_open_door doorSrv;
-    doorSrv.request.aperture_angle = atoll(argv[1]);
+    doorSrv.request.aperture_angle = atoll(argv[1]); //Params from input
     doorSrv.request.wall_distance = atoll(argv[2]);
     doorSrv.request.min_door_width = atoll(argv[3]);
 
-    
     double elevator1[4] = {0.0, 0.0, 1.0, 0.0}; //x, y, z, yaw
     double elevator2[4] = {-2.013, 11.701, 2.0, 0.0};
+    double goal[4] = {0.0, 0.0, 1.0, 0.0};
     
     double home_location[4] = {21.8, 13.9, 2.0, 0.0};
     
     while (ros::ok()) {
+        //Find self location
+/*
         ros::spinOnce();
         home_location[0] = curr_loc[0];
         home_location[1] = curr_loc[1];
         home_location[2] = curr_loc[2];
         home_location[3] = curr_loc[3];
         cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
-        
-        if(doorClient.call(doorSrv))
-        {
-            cout << doorSrv.response.door_pos.pose.position.x;
-            cout << doorSrv.response.door_pos.pose.position.y;
-            cout << doorSrv.response.door_pos.pose.position.z;
-//            cout << doorSrv.response.door_pos.pose
+ */      
+        //move_turtle_bot(elevator2)  //move in front of ele
+        while(!ele_open) {
+            //Vocalize
+            sleepok(5,n);
         }
-        else
-        {
-            ROS_ERROR("Failed to call service detect_open_door");
+        move_forward();
+/*        
+switch_map(path, n)
+        while(!ele_open) {
+            //Vocalize
+            sleepok(5,n)
         }
-        
-//        move_turtle_bot(elevator2[0], elevator2[1], elevator2[2], elevator2[3]);
-//        sleepok(2,n);
+        move_forward();
+        move_turtle_bot(goal);
+*/
     }
 }
 
+bool ele_open(doorSrv){
+    if(doorClient.call(doorSrv))
+    {
+        if(doorSrv.response.door_pos.pose.position.x == 0){
+            return false;
+        }
+        else {
+            return true; 
+        }
+    }
+    else
+    {
+        ROS_ERROR("Failed to call service detect_open_door");
+    }
+}
 
 void sleepok(int t, ros::NodeHandle &nh)
 {
@@ -88,7 +108,7 @@ void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr
     curr_loc[3] = tf::getYaw(sub_amcl->pose.pose.orientation);
 }
 
-int move_turtle_bot (double x, double y, double z, double yaw)
+int move_turtle_bot (double pos[4])
 {
 
     actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base",true);
@@ -99,10 +119,10 @@ int move_turtle_bot (double x, double y, double z, double yaw)
     goal.target_pose.header.frame_id = "/map";
     
     //set relative x, y, and angle
-    goal.target_pose.pose.position.x = x;
-    goal.target_pose.pose.position.y = y;
-    goal.target_pose.pose.position.z = z;
-    goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
+    goal.target_pose.pose.position.x = pos[0];
+    goal.target_pose.pose.position.y = pos[1];
+    goal.target_pose.pose.position.z = pos[2];
+    goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(pos[3]);
 
     //send the goal
     ac.sendGoal(goal);
@@ -113,7 +133,37 @@ int move_turtle_bot (double x, double y, double z, double yaw)
     return 0;
 }
 
-void sayPhrase(int m, char name[], char coffee[])
+int move_forward()
+{
+    actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base",true);
+    ac.waitForServer();
+    move_base_msgs::MoveBaseGoal goal;
+    
+    goal.target_pose.header.stamp = ros::Time::now();
+    goal.target_pose.header.frame_id = "/base_footprint"; //Change this
+    
+    goal.target_pose.pose.position.x = 1.0;
+    goal.target_pose.pose.orientation.w = createQuaternionMsgFromYaw(3.14);
+
+    ac.sendGoal(goal);
+    ac.waitForResult();
+
+    return 0;
+}
+
+void switch_map(string map_path, ros::NodeHandle n)
+{
+    ros::Publisher mapPub = n.advertise<>("map_server", 1);
+    
+    std_msgs::String map;
+    std::stringstream ss;
+    ss << map_path;
+    map.data = ss.str();
+    mapPub.publish(map);
+    ros::spinOnce();
+}
+
+void say_phrase(int m, char name[], char coffee[])
 {
     sound_play::SoundClient S;
 
