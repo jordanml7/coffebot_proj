@@ -158,6 +158,11 @@ target_link_libraries(coffeebot ${catkin_LIBRARIES})
 add_executable(cb_face_detector src/cb_face_detector.cpp)
 target_link_libraries(cb_face_detector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
+# Frame Broadcaster examples
+add_executable(coffeebot_frame_broadcaster src/coffeebot_frame_broadcaster.cpp)
+add_dependencies(coffeebot_frame_broadcaster  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(coffeebot_frame_broadcaster ${catkin_LIBRARIES})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
