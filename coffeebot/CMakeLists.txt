@@ -154,9 +154,9 @@ add_executable(coffeebot src/coffeebot.cpp)
 add_dependencies(coffeebot  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(coffeebot ${catkin_LIBRARIES})
 
-add_executable(localize src/localize.cpp)
-add_dependencies(localize  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(localize ${catkin_LIBRARIES})
+# OpenCV examples
+add_executable(cb_face_detector src/cb_face_detector.cpp)
+target_link_libraries(cb_face_detector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

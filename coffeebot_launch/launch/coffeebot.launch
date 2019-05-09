@@ -43,12 +43,12 @@
 	</include>
 	
 	<!-- launch leg detection -->
-	<node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan_ppl $(find legdetection_test)/config/coffee_leg_detection.yaml" output="screen">
-		<param name="leg_reliability_limit" value="0.85" />
+	<node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan_ppl $(find coffeebot)/config/coffee_leg_detection.yaml" output="screen">
+		<param name="leg_reliability_limit" value="0.80" />
 	</node>
 	
 	<!-- launch cb_face_detector -->
-	<node pkg="legdetection_test" type="cb_face_detector" name="cb_face_detector">
+	<node pkg="coffeebot" type="cb_face_detector" name="cb_face_detector">
 	</node>
 	
 	<!-- launch logging -->

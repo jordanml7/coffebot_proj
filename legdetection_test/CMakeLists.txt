@@ -152,10 +152,6 @@ add_executable(legdetection_test src/legdetection_test.cpp)
 add_dependencies(legdetection_test  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(legdetection_test ${catkin_LIBRARIES})
 
-# OpenCV examples
-add_executable(cb_face_detector src/cb_face_detector.cpp)
-target_link_libraries(cb_face_detector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-
 add_executable(spin_test src/spin_test.cpp)
 target_link_libraries(spin_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
