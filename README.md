@@ -9,7 +9,7 @@ First, create a workspace and clone the source repositories:
 $ source /opt/ros/$ROS_DISTRO/setup.bash
 $ mkdir -p ~/catkin_ws/src
 $ cd ~/catkin_ws/src
-$ git clone https://github.com/jordanml7/coffebot_proj.git
+$ git clone https://github.com/jordanml7/coffeebot_proj.git
 ```
 
 Next, install basic dependencies:
