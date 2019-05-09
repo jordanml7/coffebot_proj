@@ -4,7 +4,7 @@
     
   <node pkg="open_door_detector" type="detect_open_door" name="detect_open_door" output="screen" />
   
-  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" />
     <param name="video_device" value="/dev/video1" />
   
   
