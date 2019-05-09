@@ -5,18 +5,12 @@ project(open_door_detector)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  actionlib
-  actionlib_msgs
-  message_generation
-  move_base_msgs
   roscpp
   rospy
-  sound_play
-  tf
-  cv_bridge
-  image_transport
+  std_msgs
+  geometry_msgs
   sensor_msgs
-  people_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -119,11 +113,6 @@ target_link_libraries(detect_open_door
 ## as an example, message headers may need to be generated before nodes
 #add_dependencies(open_door_detector_node open_door_detector_generate_messages_cpp)
 add_dependencies(detect_open_door ${PROJECT_NAME}_generate_messages_cpp)
-
-add_executable(door_test src/door_test.cpp)
-target_link_libraries(door_test
-   ${catkin_LIBRARIES})
-add_dependencies(door_test ${PROJECT_NAME}_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 
