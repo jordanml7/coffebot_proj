@@ -9,6 +9,7 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <open_door_detector/detect_open_door.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <sound_play/sound_play.h>
@@ -118,6 +119,7 @@ int main(int argc, char **argv)
         move_forward();
         //Turn around
         
+        // Switch to upstairs map
         system("rosrun map_server map_server elevator_maps/2ele");
         
         //Wait for door to be open
@@ -167,7 +169,8 @@ int main(int argc, char **argv)
         move_forward();
         //Turn around
         
-	system("rosrun map_server map_server elevator_maps/1ele");
+        // Switch to downstairs map
+		system("rosrun map_server map_server elevator_maps/1ele");
 	    
         //Wait for door to be open
         while(!ele_open(n)) {

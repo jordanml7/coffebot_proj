@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <open_door_detector/detect_open_door.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
@@ -118,7 +119,8 @@ int main(int argc, char **argv)
         
         //Switch maps
         cout << "Switch to upstairs map" << endl;
-        
+        system("rosrun map_server map_server elevator_maps/2ele");
+                
         //Wait for door to be open
         while(!ele_open(n)) {
             sleepok(8,n);
@@ -166,6 +168,7 @@ int main(int argc, char **argv)
         sleepok(2,n);
         
         cout << "Switch to downstairs map" << endl;
+		system("rosrun map_server map_server elevator_maps/1ele");
         
         //Wait for door to be open
         while(!ele_open(n)) {
