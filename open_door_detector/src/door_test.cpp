@@ -58,7 +58,7 @@ int main(int argc, char **argv)
  */      
         //move_turtle_bot(elevator2)  //move in front of ele
         while(!ele_open(n)) {
-            //Vocalize
+            say_phrase(7, '', '')
             sleepok(5,n);
         }
         move_forward();
@@ -181,7 +181,9 @@ void say_phrase(int m, char name[], char coffee[])
     char coffeeRtrn[100];
     sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
 
-    string messages[6] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn};
+    string openDoor = "Plese open door";    
+    
+    string messages[7] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn,openDoor};
     
     S.say(messages[m]);
     cout << messages[m] << endl;
