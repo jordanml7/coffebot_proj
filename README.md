@@ -2,10 +2,10 @@
 ## Jordan Lueck and Marlow Fawn
 
 This workspace contains two main codes:
-	The single floor coffe retrieval code, found in `coffeebot`.
+	The single floor coffee retrieval code, found in `coffeebot`.
 	The combined multi-floor coffee retrieval code, found in `multifloor_coffeebot`.
 
-Also include are all relevant launch files, in `coffeebot_launch`, and `prelim_tests`, which includes all the code for early stage testing of various functionalities
+Also included are all relevant launch files, in `coffeebot_launch`, and `prelim_tests`, which contain the code for early stage testing of various functionalities.
 Descriptions of how to install the code and run each division can be found below.
 
 ## Installation
@@ -39,7 +39,7 @@ Must also have `tufts_service_robots` repo and all relevant Turtlebot and ROS pa
 
 Place CoffeeBot at any location on the second floor of Halligan. Then...
 
-In the first terminal, do:
+In the first terminal, run:
 ```
 $ roslaunch coffeebot_launch coffeebot_minimal.launch
 ```
@@ -47,20 +47,20 @@ Note that the minimal launch file is used because face and leg detection functio
 
 Once rViz has launched, provide an initial pose and orientation estimate for CoffeeBot.
 
-Then, in a second terminal, do:
+Then, in a second terminal, run:
 ```
 $ rosrun coffeebot coffeebot
 ```
 To activate CoffeeBot. Follow CoffeeBot's prompts. If CoffeeBot cannot be heard speaking, ensure the computer volume is at maximum.
 
-Note that the "coffeeshop" is located at the top of the Halligan main stairs. Someone will need to be there to hand over the coffee to CoffeeBot. Note also that the sensor and Arduino has been removed as it belongs to Jordan, but the code for it can be found in the `sensor_code` folder.
+Note that the "coffeeshop" is located at the top of the Halligan main stairs. Someone will need to be there to hand over the coffee to CoffeeBot. Note also that the sensor and Arduino have been removed they belong to Jordan, but the Arduino code used can be found in the `sensor_code` folder in the `coffeebot` package.
 
 
 ## Running CoffeeBot (multi-floor)
 
 Place CoffeeBot at any location on the first floor of Halligan. Then...
 
-In the first terminal, do:
+In the first terminal, run:
 ```
 $ roslaunch coffeebot_launch multifloor_coffeebot.launch
 ```
@@ -68,7 +68,7 @@ Note that this launch file also does not run any person detection functionalitie
 
 Once rViz has launched, provide an initial pose and orientation estimate for CoffeeBot.
 
-Then, in a second terminal, do:
+Then, in a second terminal, run:
 ```
 $ rosrun multifloor_coffeebot multifloor_coffeebot
 ```
