@@ -2,7 +2,9 @@
 ## Jordan Lueck and Marlow Fawn
 
 This workspace contains two main codes:
+
 	The single floor coffee retrieval code, found in `coffeebot`.
+
 	The combined multi-floor coffee retrieval code, found in `multifloor_coffeebot`.
 
 Also included are all relevant launch files, in `coffeebot_launch`, and `prelim_tests`, which contain the code for early stage testing of various functionalities.
