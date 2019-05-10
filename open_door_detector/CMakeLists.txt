@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   tf
+  sound_play
 )
 
 ## System dependencies are found with CMake's conventions
