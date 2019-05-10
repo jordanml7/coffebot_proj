@@ -1,3 +1,5 @@
+
+
 #include <ros/ros.h>
 #include <tf/tf.h>
 #include <move_base_msgs/MoveBaseAction.h>
@@ -16,7 +18,7 @@
 
 using namespace std;
 
-double curr_loc[3];
+double curr_loc[4];
 bool press_sense;
 
 void sleepok(int, ros::NodeHandle &);
@@ -24,6 +26,8 @@ void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr
 int move_turtle_bot (double, double, double);
 void detect_coffee(const std_msgs::Bool& msg);
 void sayPhrase(int, char[], char[]);
+bool ele_open(ros::NodeHandle);
+int move_forward();
 
 int main(int argc, char **argv)
 {
@@ -46,17 +50,22 @@ int main(int argc, char **argv)
     sleepok(2,n);
     
     // this will be reset based on starting location
-    double home_location[3] = {21.8,13.9,0.0};
+    double home_location[4] = {21.8,13.9,0.0, 0.0};
     
     // coffee shop is currently at the top of the stairs
-    double coffee_shop[3] = {-0.8662,1.670,0};
+    double coffee_shop[4] = {-0.8662,1.670,2.0, 0.0};
+    
+    double elevator1[4] = {0.0, 0.0, 1.0, 0.0}; //x, y, z, yaw
+    double elevator2[4] = {-2.013, 11.701, 2.0, 0.0};
+    double goal[4] = {0.0, 0.0, 1.0, 0.0};
   
     while (ros::ok()) {
         
         ros::spinOnce();
         home_location[0] = curr_loc[0];
         home_location[1] = curr_loc[1];
-        home_location[2] = curr_loc[2];
+        home_location[2] = 2.0;
+        home_location[3] = curr_loc[3];
         cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
 
         // Greet and ask for user's name
@@ -96,8 +105,32 @@ int main(int argc, char **argv)
         
         // Headed to the coffeeshop!
         cout << "Traveling to: " << coffee_shop[0] << ", " << coffee_shop[1] << endl;   
-        move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[2]);
+        
+        //Move to 1st floor elevator 
+        move_turtle_bot(elevator1[0],elevator1[1],elevator1[3]);
         sleepok(2,n);
+        
+        //Wait for door to be open
+        while(!ele_open(n)) {
+            say_phrase(9, NULL, NULL);
+            sleepok(8,n);
+        }
+        //Enter elevator
+        move_forward();
+        //Turn around
+        
+        //Switch maps
+        
+        //Wait for door to be open
+        while(!ele_open(n)) {
+            sleepok(8,n);
+        }
+
+        //Exit elevator
+        move_forward();
+        
+        //Finish navigating to coffee_shop
+        move_turtle_bot(coffee_shop[0],coffee_shop[1],coffee_shop[3]);
 
 		// Place coffee order
         sayPhrase(5,NULL,coffee);
@@ -121,7 +154,30 @@ int main(int argc, char **argv)
         
         // Headed back to the user!
         cout << "Returning to: " << home_location[0] << ", " << home_location[1] << endl;
-        move_turtle_bot(home_location[0],home_location[1],home_location[2]);
+        
+        //Move to 1st floor elevator 
+        move_turtle_bot(elevator2[0],elevator2[1],elevator2[3]);
+        sleepok(2,n);
+        
+        //Wait for door to be open
+        while(!ele_open(n)) {
+            say_phrase(9, NULL, NULL);
+            sleepok(8,n);
+        }
+        //Enter elevator
+        move_forward();
+        //Turn around
+        
+        //Wait for door to be open
+        while(!ele_open(n)) {
+            sleepok(8,n);
+        }
+
+        //Exit elevator
+        move_forward();
+        
+        //Finish navigating home
+        move_turtle_bot(home_location[0],home_location[1],home_location[3]);
         sleepok(2,n);
         
         // Deliver coffee
@@ -145,7 +201,7 @@ void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr
 {
     curr_loc[0] = sub_amcl->pose.pose.position.x;
     curr_loc[1] = sub_amcl->pose.pose.position.y;
-    curr_loc[2] = tf::getYaw(sub_amcl->pose.pose.orientation);
+    curr_loc[3] = tf::getYaw(sub_amcl->pose.pose.orientation);
 }
 
 void detect_coffee(const std_msgs::Bool& msg)
@@ -195,8 +251,9 @@ void sayPhrase(int m, char name[], char coffee[])
     string thankYou = "Thank You!";
     char coffeeRtrn[100];
     sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
+    string openDoor = "Please open door"; 
 
-    string messages[9] = {startMsg,coffeeRqst,negRspn, \
+    string messages[10] = {startMsg,coffeeRqst,negRspn, \
 		takeOrder,coffeeCnfm,placeOrdr,waitingMsg,thankYou,coffeeRtrn};
     
     S.say(messages[m]);
@@ -222,4 +279,45 @@ void sayPhrase(int m, char name[], char coffee[])
 		cout << "*                                     *" << endl;
 		cout << "***************************************" << endl;
 	}
+}
+int move_forward()
+{
+    actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac("move_base",true);
+    ac.waitForServer();
+    move_base_msgs::MoveBaseGoal goal;
+    
+    goal.target_pose.header.stamp = ros::Time::now();
+    goal.target_pose.header.frame_id = "/base_footprint"; //Change this
+    
+    goal.target_pose.pose.position.x = -1.0;
+    goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(0.0);
+
+    ac.sendGoal(goal);
+    ac.waitForResult();
+
+    return 0;
+}
+
+bool ele_open(ros::NodeHandle n)
+{
+    //Start open door detecting service
+    ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door"); 
+    open_door_detector::detect_open_door doorSrv;
+    doorSrv.request.aperture_angle = 0;
+    doorSrv.request.wall_distance = 2;
+    doorSrv.request.min_door_width = 0.2;
+    
+    if(doorClient.call(doorSrv))
+    {
+        if(doorSrv.response.door_pos.pose.position.x == 0){
+            return false;
+        }
+        else {
+            return true; 
+        }
+    }
+    else
+    {
+        ROS_ERROR("Failed to call service detect_open_door");
+    }
 }
