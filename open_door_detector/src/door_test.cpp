@@ -146,7 +146,7 @@ int move_forward()
     goal.target_pose.header.frame_id = "/base_footprint"; //Change this
     
     goal.target_pose.pose.position.x = -1.0;
-    //goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(3.14);
+    goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(0.0 goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(pos[3]););
 
     ac.sendGoal(goal);
     ac.waitForResult();
