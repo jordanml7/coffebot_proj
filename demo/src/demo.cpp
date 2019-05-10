@@ -49,13 +49,16 @@ int main(int argc, char **argv)
     //sleep for a bit to make sure the pub will work
     sleepok(2,n);
     
+    // Start on downstairs map
+	system("rosrun map_server map_server src/coffeebot_proj/elevator_maps/1ele");
+    
     // this will be reset based on starting location
     double home_location[4] = {21.8,13.9,1.0, 0.0};
     
     // coffee shop is currently at the top of the stairs
     double coffee_shop[4] = {-0.8662,1.670,2.0, 0.0};
     
-    double elevator1[4] = {0.0, 0.0, 1.0, 0.0}; //x, y, z, yaw
+    double elevator1[4] = {24.6, 44.6, 1.0, 0.0}; //x, y, z, yaw
     double elevator2[4] = {-2.013, 11.701, 2.0, 0.0};
     double goal[4] = {0.0, 0.0, 1.0, 0.0};
   
@@ -119,7 +122,7 @@ int main(int argc, char **argv)
         
         //Switch maps
         cout << "Switch to upstairs map" << endl;
-        system("rosrun map_server map_server elevator_maps/2ele");
+        system("rosrun map_server map_server src/coffeebot_proj/elevator_maps/2ele");
                 
         //Wait for door to be open
         while(!ele_open(n)) {
@@ -168,7 +171,7 @@ int main(int argc, char **argv)
         sleepok(2,n);
         
         cout << "Switch to downstairs map" << endl;
-		system("rosrun map_server map_server elevator_maps/1ele");
+		system("rosrun map_server map_server src/coffeebot_proj/elevator_maps/1ele");
         
         //Wait for door to be open
         while(!ele_open(n)) {
