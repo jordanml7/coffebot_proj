@@ -9,6 +9,8 @@ project(multifloor_coffeebot)
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+include_directories(open_door_detector)
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -61,33 +63,6 @@ find_package(catkin REQUIRED COMPONENTS
 ##     and list every .msg/.srv/.action file to be processed
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
-
-## Generate services in the 'srv' folder
-add_service_files(
-   FILES
-   detect_open_door.srv
- )
-
-## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
-
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-   DEPENDENCIES
-   std_msgs
-   geometry_msgs
-)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -153,10 +128,6 @@ include_directories(
 add_executable(multifloor_coffeebot src/multifloor_coffeebot.cpp)
 add_dependencies(multifloor_coffeebot  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(multifloor_coffeebot ${catkin_LIBRARIES})
-
-add_executable(detect_open_door src/detect_open_door.cpp)
-add_dependencies(detect_open_door ${PROJECT_NAME}_generate_messages_cpp)
-target_link_libraries(detect_open_door ${catkin_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

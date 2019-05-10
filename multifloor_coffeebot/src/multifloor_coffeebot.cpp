@@ -4,16 +4,16 @@
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_listener.h>
 #include <actionlib/server/simple_action_server.h>
-#include <multifloor_coffeebot/detect_open_door.h>
 #include <vector>
 #include <iostream>
 #include <string>
 #include <stdio.h>
 
-#include "geometry_msgs/PoseWithCovarianceStamped.h"
-#include "sound_play/sound_play.h"
-#include "sound_play/SoundRequest.h"
-#include "std_msgs/Bool.h"
+#include "open_door_detector/detect_open_door.h"
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <sound_play/sound_play.h>
+#include <sound_play/SoundRequest.h>
+#include <std_msgs/Bool.h>
 
 using namespace std;
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     sleepok(2,n);
     
     // this will be reset based on starting location
-    double home_location[4] = {21.8,13.9,0.0, 0.0};
+    double home_location[4] = {21.8,13.9,1.0, 0.0};
     
     // coffee shop is currently at the top of the stairs
     double coffee_shop[4] = {-0.8662,1.670,2.0, 0.0};
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
         ros::spinOnce();
         home_location[0] = curr_loc[0];
         home_location[1] = curr_loc[1];
-        home_location[2] = 2.0;
+        home_location[2] = 1.0;
         home_location[3] = curr_loc[3];
         cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
 
