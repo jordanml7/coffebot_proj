@@ -22,7 +22,7 @@ using namespace std;
 
 double curr_loc[4];
 
-bool ele_open(open_door_detector::detect_open_door);
+bool ele_open(ros::NodeHandle);
 int move_forward();
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
@@ -37,14 +37,6 @@ int main(int argc, char **argv)
     sleepok(2,n);
     // subscriber for position
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",100,get_turtle_bot_loc);
-
-    //Start open door detecting service
-    ros::init(argc, argv, "open_door_detector_client");
-    ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door"); 
-    open_door_detector::detect_open_door doorSrv;
-    doorSrv.request.aperture_angle = atoll(argv[1]); //Params from input
-    doorSrv.request.wall_distance = atoll(argv[2]);
-    doorSrv.request.min_door_width = atoll(argv[3]);
 
     double elevator1[4] = {0.0, 0.0, 1.0, 0.0}; //x, y, z, yaw
     double elevator2[4] = {-2.013, 11.701, 2.0, 0.0};
@@ -63,7 +55,7 @@ int main(int argc, char **argv)
         cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
  */      
         //move_turtle_bot(elevator2)  //move in front of ele
-        while(!ele_open(doorSrv)) {
+        while(!ele_open(n)) {
             //Vocalize
             sleepok(5,n);
         }
@@ -80,8 +72,16 @@ switch_map(path, n)
     }
 }
 
-bool ele_open(open_door_detector::detect_open_door doorSrv)
+bool ele_open(ros::NodeHandle n)
 {
+    //Start open door detecting service
+    ros::init(argc, argv, "open_door_detector_client");
+    ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door"); 
+    open_door_detector::detect_open_door doorSrv;
+    doorSrv.request.aperture_angle = 0;
+    doorSrv.request.wall_distance = 2;
+    doorSrv.request.min_door_width = 0.2;
+    
     if(doorClient.call(doorSrv))
     {
         if(doorSrv.response.door_pos.pose.position.x == 0){
