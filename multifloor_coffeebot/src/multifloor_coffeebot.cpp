@@ -1,11 +1,10 @@
-
-
 #include <ros/ros.h>
 #include <tf/tf.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_listener.h>
 #include <actionlib/server/simple_action_server.h>
+#include <multifloor_coffeebot/detect_open_door.h>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -112,7 +111,7 @@ int main(int argc, char **argv)
         
         //Wait for door to be open
         while(!ele_open(n)) {
-            say_phrase(9, NULL, NULL);
+            sayPhrase(9, NULL, NULL);
             sleepok(8,n);
         }
         //Enter elevator
@@ -161,7 +160,7 @@ int main(int argc, char **argv)
         
         //Wait for door to be open
         while(!ele_open(n)) {
-            say_phrase(9, NULL, NULL);
+            sayPhrase(9, NULL, NULL);
             sleepok(8,n);
         }
         //Enter elevator

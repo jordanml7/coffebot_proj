@@ -62,10 +62,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate services in the 'srv' folder
-add_service_files(
-   FILES
-   detect_open_door.srv
- )
+#add_service_files(
+#   FILES
+#   detect_open_door.srv
+# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -75,11 +75,11 @@ add_service_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-   DEPENDENCIES
-   std_msgs
-   geometry_msgs
-)
+#generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+#   geometry_msgs
+#)
 
 ###################################
 ## catkin specific configuration ##
@@ -93,7 +93,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES open_door_detector
-   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+#   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -113,19 +113,9 @@ include_directories(
 #   src/${PROJECT_NAME}/open_door_detector.cpp
 # )
 
-## Declare a cpp executable
-add_executable(detect_open_door src/detect_open_door.cpp)
-target_link_libraries(detect_open_door
-   ${catkin_LIBRARIES})
-
 add_executable(door_test src/door_test.cpp)
-target_link_libraries(door_test
-   ${catkin_LIBRARIES})
-
-## Add cmake target dependencies of the executable/library
-## as an example, message headers may need to be generated before nodes
-##add_dependencies(open_door_detector_node open_door_detector_generate_messages_cpp)
-add_dependencies(detect_open_door ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(door_test  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(door_test ${catkin_LIBRARIES})
 
 ## Specify libraries to link a library or executable target against
 

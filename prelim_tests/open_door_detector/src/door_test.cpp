@@ -4,7 +4,7 @@
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_listener.h>
 #include <actionlib/server/simple_action_server.h>
-#include <open_door_detector/detect_open_door.h>
+#include <multifloor_coffeebot/detect_open_door.h>
 #include "geometry_msgs/Pose.h"
 #include "geometry_msgs/PoseArray.h"
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
  */      
         //move_turtle_bot(elevator2)  //move in front of ele
         while(!ele_open(n)) {
-            say_phrase(6, NULL, NULL);
+            say_phrase(0, NULL, NULL);
             sleepok(5,n);
         }
         move_forward();
@@ -173,20 +173,9 @@ void say_phrase(int m, char name[], char coffee[])
 {
     sound_play::SoundClient S;
 
-    string startMsg = "Hello, what's your name?";
-    char coffeeRqst[100];
-    sprintf(coffeeRqst,"Hi there, %s! What coffee can I get for you?",name);
-    char coffeeCnfm[100];
-    sprintf(coffeeCnfm,"Great, I'll be back with your %s in just a few moments. Wait here.",coffee);
-    char coffeeOrdr[100];
-    sprintf(coffeeOrdr,"Hi! Could I please get a %s? Please press enter to tell me it's done.",coffee);
-    string thankYou = "Thank You!";
-    char coffeeRtrn[100];
-    sprintf(coffeeRtrn,"Hi %s, here's your %s. Enjoy!",name,coffee);
-
     string openDoor = "Plese open door";    
     
-    string messages[7] = {startMsg,coffeeRqst,coffeeCnfm,coffeeOrdr,thankYou,coffeeRtrn,openDoor};
+    string messages[1] = {openDoor};
     
     S.say(messages[m]);
     cout << messages[m] << endl;
