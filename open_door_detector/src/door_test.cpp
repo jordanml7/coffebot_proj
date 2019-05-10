@@ -58,7 +58,7 @@ int main(int argc, char **argv)
  */      
         //move_turtle_bot(elevator2)  //move in front of ele
         while(!ele_open(n)) {
-            say_phrase(7, NULL, NULL);
+            say_phrase(6, NULL, NULL);
             sleepok(5,n);
         }
         move_forward();
