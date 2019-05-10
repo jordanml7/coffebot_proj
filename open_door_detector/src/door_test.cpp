@@ -22,6 +22,8 @@ using namespace std;
 
 double curr_loc[4];
 
+bool ele_open(open_door_detector::detect_open_door);
+int move_forward();
 void sleepok(int, ros::NodeHandle &);
 void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 int move_turtle_bot (double, double, double);
