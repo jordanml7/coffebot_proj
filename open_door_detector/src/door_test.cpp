@@ -32,14 +32,17 @@ void say_phrase(int, char [], char []);
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "move_base_client");
-    ros::init(argc, argv, "open_door_detector_client");
+    //ros::init(argc, argv, "open_door_detector_client");
 
     ros::NodeHandle n;
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
+    
+    ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound", 1);
+
     // subscriber for position
     ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",100,get_turtle_bot_loc);
-
+    
     double elevator1[4] = {0.0, 0.0, 1.0, 0.0}; //x, y, z, yaw
     double elevator2[4] = {-2.013, 11.701, 2.0, 0.0};
     double goal[4] = {0.0, 0.0, 1.0, 0.0};
