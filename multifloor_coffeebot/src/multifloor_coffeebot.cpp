@@ -9,7 +9,7 @@
 #include <string>
 #include <stdio.h>
 
-#include "open_door_detector/detect_open_door.h"
+#include <open_door_detector/detect_open_door.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <sound_play/sound_play.h>
 #include <sound_play/SoundRequest.h>

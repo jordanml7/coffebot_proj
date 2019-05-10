@@ -9,9 +9,6 @@ project(multifloor_coffeebot)
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-include_directories(open_door_detector)
-
-
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -29,6 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   people_msgs
   geometry_msgs
+  open_door_detector
 )
 
 ## System dependencies are found with CMake's conventions
