@@ -118,7 +118,7 @@ int main(int argc, char **argv)
         move_forward();
         //Turn around
         
-        sytem("rosrun map_server map_server elevator_maps/2ele");
+        system("rosrun map_server map_server elevator_maps/2ele");
         
         //Wait for door to be open
         while(!ele_open(n)) {
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
         move_forward();
         //Turn around
         
-	sytem("rosrun map_server map_server elevator_maps/1ele");
+	system("rosrun map_server map_server elevator_maps/1ele");
 	    
         //Wait for door to be open
         while(!ele_open(n)) {
