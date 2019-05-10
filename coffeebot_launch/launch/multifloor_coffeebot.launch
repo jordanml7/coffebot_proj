@@ -25,6 +25,9 @@
 	<!-- launch amcl navigation -->
 	<include file="$(find tbot2_launch)/launch/amcl_navigation.launch">
 	</include>
+	
+	<!-- launch open door detector -->
+	<node pkg="multifloor_coffeebot" type="detect_open_door" name="detect_open_door" output="screen" />
 		
 	<!-- launch logging -->
 	<include file="$(find tbot2_launch)/launch/logging.launch">

@@ -26,7 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   sensor_msgs
   people_msgs
-  std_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -153,6 +153,10 @@ include_directories(
 add_executable(multifloor_coffeebot src/multifloor_coffeebot.cpp)
 add_dependencies(multifloor_coffeebot  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(multifloor_coffeebot ${catkin_LIBRARIES})
+
+add_executable(detect_open_door src/detect_open_door.cpp)
+add_dependencies(detect_open_door ${PROJECT_NAME}_generate_messages_cpp)
+target_link_libraries(detect_open_door ${catkin_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
