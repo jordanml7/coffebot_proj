@@ -8,8 +8,6 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
-#include <elevator_maps/elevator_maps.h>
-
 #include <open_door_detector/detect_open_door.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <sound_play/sound_play.h>
