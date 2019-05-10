@@ -1,6 +1,5 @@
 #include <ros/ros.h>
 #include <tf/tf.h>
-#include <publisher.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_listener.h>
