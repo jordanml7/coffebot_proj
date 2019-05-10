@@ -27,7 +27,7 @@
 	</include>
 	
 	<!-- launch open door detector -->
-	<node pkg="multifloor_coffeebot" type="detect_open_door" name="detect_open_door" output="screen" />
+	<node pkg="open_door_detector" type="detect_open_door" name="detect_open_door" output="screen" />
 		
 	<!-- launch logging -->
 	<include file="$(find tbot2_launch)/launch/logging.launch">
