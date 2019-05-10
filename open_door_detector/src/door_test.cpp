@@ -32,6 +32,8 @@ void say_phrase(int, char [], char []);
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "move_base_client");
+    ros::init(argc, argv, "open_door_detector_client");
+
     ros::NodeHandle n;
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
@@ -75,7 +77,6 @@ switch_map(path, n)
 bool ele_open(ros::NodeHandle n)
 {
     //Start open door detecting service
-    ros::init(argc, argv, "open_door_detector_client");
     ros::ServiceClient doorClient = n.serviceClient<open_door_detector::detect_open_door>("detect_open_door"); 
     open_door_detector::detect_open_door doorSrv;
     doorSrv.request.aperture_angle = 0;
@@ -145,7 +146,7 @@ int move_forward()
     goal.target_pose.header.frame_id = "/base_footprint"; //Change this
     
     goal.target_pose.pose.position.x = 1.0;
-    goal.target_pose.pose.orientation.w = createQuaternionMsgFromYaw(3.14);
+    goal.target_pose.pose.orientation.w = tf::createQuaternionMsgFromYaw(3.14);
 
     ac.sendGoal(goal);
     ac.waitForResult();
