@@ -61,7 +61,7 @@ int main(int argc, char **argv)
         cout << "Starting at: " << home_location[0] << ", " << home_location[1] << endl;
  */      
         //move_turtle_bot(elevator2)  //move in front of ele
-        while(!ele_open) {
+        while(!ele_open(doorSrv)) {
             //Vocalize
             sleepok(5,n);
         }
@@ -78,7 +78,8 @@ switch_map(path, n)
     }
 }
 
-bool ele_open(doorSrv){
+bool ele_open(open_door_detector::detect_open_door doorSrv)
+{
     if(doorClient.call(doorSrv))
     {
         if(doorSrv.response.door_pos.pose.position.x == 0){
