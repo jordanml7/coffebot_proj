@@ -21,7 +21,7 @@
 		<remap from="/usb_cam/image_raw" to="/usb_cam/rgb/image_raw"/>
 	</node>
 	
-  <node pkg="open_door_detector" type="detect_open_door" name="detect_open_door" output="screen" />
+ 	<node pkg="open_door_detector" type="detect_open_door" name="detect_open_door" output="screen" />
   
 	<!-- launch sound_play so the robot can speak -->
 	<node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
