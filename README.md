@@ -1,11 +1,7 @@
 # The Rise and Fall of Coffeebot
 ## Jordan Lueck and Marlow Fawn
 
-This workspace contains two main codes:
-
-	The single floor coffee retrieval code, found in `coffeebot`.
-
-	The combined multi-floor coffee retrieval code, found in `multifloor_coffeebot`.
+This workspace contains two main codes: the single floor coffee retrieval code, found in `coffeebot` and the combined multi-floor coffee retrieval code, found in `multifloor_coffeebot`.
 
 Also included are all relevant launch files, in `coffeebot_launch`, and `prelim_tests`, which contain the code for early stage testing of various functionalities.
 Descriptions of how to install the code and run each division can be found below.
@@ -45,7 +41,7 @@ In the first terminal, run:
 ```
 $ roslaunch coffeebot_launch coffeebot_minimal.launch
 ```
-Note that the minimal launch file is used because face and leg detection functionalities proved relatively ineffective. To use these, instead run 'coffeebot.launch' and uncomment the relevant marked sections of the coffeebot code.
+Note that the minimal launch file is used because face and leg detection functionalities proved relatively ineffective. To use these, instead run `coffeebot.launch` and uncomment the relevant marked sections of the coffeebot code.
 
 Once rViz has launched, provide an initial pose and orientation estimate for CoffeeBot.
 
