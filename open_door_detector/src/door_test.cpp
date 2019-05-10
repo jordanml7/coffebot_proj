@@ -152,7 +152,7 @@ int move_forward()
 
     return 0;
 }
-
+/*
 void switch_map(string map_path, ros::NodeHandle n)
 {
     ros::Publisher mapPub = n.advertise<>("map_server", 1);
@@ -164,7 +164,7 @@ void switch_map(string map_path, ros::NodeHandle n)
     mapPub.publish(map);
     ros::spinOnce();
 }
-
+*/
 void say_phrase(int m, char name[], char coffee[])
 {
     sound_play::SoundClient S;
