@@ -9,37 +9,20 @@
 #include <string>
 #include <stdio.h>
 
-#include <geometry_msgs/Pose.h>
-#include <geometry_msgs/PoseArray.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <people_msgs/PositionMeasurementArray.h>
-#include <people_msgs/PositionMeasurement.h>
-#include <std_msgs/Float64MultiArray.h>
-#include <sound_play/sound_play.h>
-#include <sound_play/SoundRequest.h>
-#include <std_msgs/Bool.h>
+#include "geometry_msgs/PoseWithCovarianceStamped.h"
+#include "sound_play/sound_play.h"
+#include "sound_play/SoundRequest.h"
+#include "std_msgs/Bool.h"
 
 using namespace std;
 
-#define PI 3.14159265359
-
 double curr_loc[3];
-
-double person_loc[3]; // Unused in final run
-vector<double> leg_locs; // Unused in final run
-vector<double> face_locs; // Unused in final run
 bool press_sense;
 
 void sleepok(int, ros::NodeHandle &);
-void get_turtle_bot_loc(const 
-	geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
+void get_turtle_bot_loc(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& sub_amcl);
 int move_turtle_bot (double, double, double);
 void detect_coffee(const std_msgs::Bool& msg);
-void get_leg_locs(const 
-	people_msgs::PositionMeasurementArray::ConstPtr& input_legs);  // Unused in final run
-void get_face_locs(const 
-	std_msgs::Float64MultiArray::ConstPtr& input_faces);  // Unused in final run
-bool find_person(double);  // Unused in final run
 void sayPhrase(int, char[], char[]);
 
 int main(int argc, char **argv)
@@ -48,31 +31,17 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
     
     // subscriber for position
-    ros::Subscriber sub_amcl = 
-		n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
+    ros::Subscriber sub_amcl = n.subscribe("/amcl_pose",1,get_turtle_bot_loc);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
     
     // subscriber for arduino sensor msgs
-    ros::Subscriber coffee_detect = 
-		n.subscribe("/coffee_topic",1,detect_coffee);
+    ros::Subscriber coffee_detect = n.subscribe("/coffee_topic",1,detect_coffee);
     //sleep for a bit to make sure the sub will work
     sleepok(2,n);
     
-    /* These subscribers are unused in the final run */
-    // subscriber for leg position
-    //ros::Subscriber leg_meas = n.subscribe("/people_tracker_measurements",1,get_leg_locs);
-    //sleep for a bit to make sure the sub will work
-    //sleepok(2,n);
-    
-    // subscriber for face position
-    //ros::Subscriber face_meas = n.subscribe("/rel_yaw_frac",1,get_face_locs);
-    //sleep for a bit to make sure the sub will work
-    //sleepok(2,n);
-    
     // publisher for sound
-    ros::Publisher sound_pub = 
-		n.advertise<sound_play::SoundRequest>("/robotsound",1);
+    ros::Publisher sound_pub = n.advertise<sound_play::SoundRequest>("/robotsound",1);
     //sleep for a bit to make sure the pub will work
     sleepok(2,n);
     
@@ -83,12 +52,6 @@ int main(int argc, char **argv)
     double coffee_shop[3] = {-0.8662,1.670,0};
   
     while (ros::ok()) {
-        
-        /* The code below is unused but is meant to locate a starting
-         * individual and have CoffeeBot approach them */
-        //ros::spinOnce();
-        //if(find_person(0.2)) // 0.2 is the yaw threshold for comparing the face & leg data
-		//	move_turtle_bot(person_loc[0],person_loc[1],person_loc[2]);
         
         ros::spinOnce();
         home_location[0] = curr_loc[0];
@@ -103,7 +66,6 @@ int main(int argc, char **argv)
         cin.getline(name,100);
         sleepok(2,n);
         
-        // Ask if user wants coffee
         while(true) {
 			sayPhrase(1,name,NULL);
 			sleepok(2,n);
@@ -260,52 +222,4 @@ void sayPhrase(int m, char name[], char coffee[])
 		cout << "*                                     *" << endl;
 		cout << "***************************************" << endl;
 	}
-}
-
-void get_leg_locs(const people_msgs::PositionMeasurementArray::ConstPtr& input_legs)
-{
-    int ppl_meas = input_legs->people.size();
-    leg_locs.resize(2*ppl_meas);
-    int j = 0;
-    for(int i = 0; i < ppl_meas; i++) {
-        leg_locs[j] = input_legs->people[i].pos.x;
-        leg_locs[j+1] = input_legs->people[i].pos.y;
-        j += 2;
-    }
-}
-
-void get_face_locs(const std_msgs::Float64MultiArray::ConstPtr& input_faces)
-{
-    int ppl_meas = input_faces->data.size();
-    face_locs.resize(ppl_meas);
-    for (int i = 0; i < ppl_meas; i++)
-        face_locs[i] = PI*input_faces->data[i];
-}
-
-bool find_person(double threshold)
-{
-	double myX = curr_loc[0];
-	double myY = curr_loc[1];
-    double myYaw = curr_loc[2];
-    cout << "Currently at x: " << myX << ", y: " << myY << ", yaw: " << myYaw << endl;
-    
-    int legs = leg_locs.size();
-    int faces = face_locs.size();
-    for(int i = 0; i < legs; i += 2) {
-		double thisX = leg_locs[i];
-		double thisY = leg_locs[i+1];
-		double legs_Yaw = atan((thisY-myY)/(thisX-myX));
-		cout << "Legs at x: " << thisX << ", y: " << thisY << ", yaw: " << legs_Yaw << endl;
-		for(int j = 0; j < faces; j++) {
-			double face_Yaw = face_locs[i];
-			cout << "Face at yaw: " << face_Yaw << endl;
-			if((face_Yaw > legs_Yaw-threshold) && (face_Yaw < legs_Yaw+threshold)) {
-				person_loc[0] = thisX;
-				person_loc[1] = thisY;
-				person_loc[2] = legs_Yaw;
-				return true;
-			}
-		}
-	}
-	return false;	
 }
