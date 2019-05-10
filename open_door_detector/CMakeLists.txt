@@ -107,13 +107,16 @@ include_directories(
 
 ## Declare a cpp executable
 add_executable(detect_open_door src/detect_open_door.cpp)
-add_executable(detect_open_door src/door_test.cpp)
 target_link_libraries(detect_open_door
    ${catkin_LIBRARIES})
-   
+
+add_executable(door_test src/door_test.cpp)
+target_link_libraries(door_test
+   ${catkin_LIBRARIES})
+
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-#add_dependencies(open_door_detector_node open_door_detector_generate_messages_cpp)
+##add_dependencies(open_door_detector_node open_door_detector_generate_messages_cpp)
 add_dependencies(detect_open_door ${PROJECT_NAME}_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
